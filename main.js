@@ -31,7 +31,7 @@ const runCommand = (cmd) => {
       write('This is a fake Ubuntu terminal built in JS.');
       break;
     case 'clear':
-      terminal_view = '';
+      terminal_view = '\n';
       break;
     default:
       write(`Command not found: ${cmd}`);
