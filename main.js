@@ -85,5 +85,5 @@ document.addEventListener('keydown', (e) => {
     render();
 });
 
-write('Ubuntu 22.04 Web Terminal\nType "help" to begin.');
+write('\nUbuntu 22.04 Web Terminal\nType "help" to begin.');
 render();
