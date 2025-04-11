@@ -16,7 +16,7 @@ localStorage.setItem('username', username);
 const getPrompt = () => `<span class="prompt">${username}@${hostname}:${cwd}$</span> `;
 
 const write = (text) => {
-  if (buffer.trim() =! ""){
+  if (text.trim() =! ""){
     history += text + '\n';
   }
 };
@@ -27,27 +27,27 @@ const render = () => {
 };
 
 const runCommand = (cmd) => {
-    write(getPrompt() + cmd);
+  write(getPrompt() + cmd);
 
-    switch (cmd) {
-        case 'help':
-            write('Available commands: help, about, clear');
-            break;
-        case 'about':
-            write('This is a fake Ubuntu terminal built in JS.');
-            break;
-        case 'clear':
-            history = '';
-            break;
-        case '':
-          write('\n')
+  switch (cmd) {
+      case 'help':
+          write('Available commands: help, about, clear');
           break;
-        default:
-            write(`Command not found: ${cmd}`);
-    }
+      case 'about':
+          write('This is a fake Ubuntu terminal built in JS.');
+          break;
+      case 'clear':
+          history = '';
+          break;
+      case '':
+          write('\n');
+          break;
+      default:
+          write(`Command not found: ${cmd}`);
+  }
 
-    buffer = '';
-    render();
+  buffer = '';
+  render();
 };
 
 document.addEventListener('keydown', (e) => {
