@@ -1,46 +1,49 @@
-const term = new Terminal({
-    cursorBlink: true,
-    theme: { background: '#000000' }
-  });
-  term.open(document.getElementById('terminal'));
-  
-  const prompt = () => term.write('\r\n$ ');
-  
-  term.writeln('Welcome to your web terminal!');
-  prompt();
-  
-  let buffer = '';
-  
-  term.onKey(e => {
-    const char = e.key;
-    if (e.domEvent.key === 'Enter') {
-      handleCommand(buffer.trim());
-      buffer = '';
-      prompt();
-    } else if (e.domEvent.key === 'Backspace') {
-      if (buffer.length > 0) {
-        term.write('\b \b');
-        buffer = buffer.slice(0, -1);
-      }
-    } else {
-      buffer += char;
-      term.write(char);
-    }
-  });
-  
-  function handleCommand(cmd) {
-    switch (cmd) {
-      case 'help':
-        term.writeln('Available commands: help, about, clear');
-        break;
-      case 'about':
-        term.writeln('This is a fake terminal running in your browser.');
-        break;
-      case 'clear':
-        term.clear();
-        break;
-      default:
-        term.writeln(`Command not found: ${cmd}`);
-    }
+const term = document.getElementById('terminal');
+
+let cwd = '~';
+let buffer = '';
+let history = '';
+
+const write = (text) => {
+  history += text + '\n';
+};
+
+const render = () => {
+  term.innerHTML = history + `<span class="prompt">${cwd} $</span> ${buffer}_`;
+  term.scrollTop = term.scrollHeight;
+};
+
+const runCommand = (cmd) => {
+  write(`<span class="prompt">${cwd} $</span> ${cmd}`);
+
+  switch (cmd) {
+    case 'help':
+      write('Available commands: help, about, clear');
+      break;
+    case 'about':
+      write('This is a fake Ubuntu terminal built in JS.');
+      break;
+    case 'clear':
+      history = '';
+      break;
+    default:
+      write(`Command not found: ${cmd}`);
   }
-  
+
+  buffer = '';
+  render();
+};
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Backspace') {
+    buffer = buffer.slice(0, -1);
+  } else if (e.key === 'Enter') {
+    runCommand(buffer.trim());
+  } else if (e.key.length === 1) {
+    buffer += e.key;
+  }
+  render();
+});
+
+write('Ubuntu 22.04 Web Terminal\nType "help" to begin.');
+render();
