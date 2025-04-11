@@ -35,7 +35,7 @@ const runCommand = (cmd) => {
             write('This is a fake Ubuntu terminal built in JS.');
             break;
         case 'clear':
-            history = '';
+            history = '\n';
             break;
         case '':
           break;
