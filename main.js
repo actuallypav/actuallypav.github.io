@@ -2,7 +2,7 @@ const term = document.getElementById('terminal');
 
 let cwd = '~';
 let buffer = '';
-let terminal_view = '';
+let history = '';
 
 let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
 let hostname = 'ubuntu-web-terminal';
@@ -12,11 +12,11 @@ localStorage.setItem('username', username);
 const getPrompt = () => `<span class="prompt">${username}@${hostname}:${cwd}$</span> `;
 
 const write = (text) => {
-  terminal_view += text + '\n';
+  history += text + '\n';
 };
 
 const render = () => {
-  term.innerHTML = terminal_view + getPrompt() + `${buffer}_`;
+  term.innerHTML = history + getPrompt() + `${buffer}_`;
   term.scrollTop = term.scrollHeight;
 };
 
@@ -31,7 +31,7 @@ const runCommand = (cmd) => {
       write('This is a fake Ubuntu terminal built in JS.');
       break;
     case 'clear':
-      terminal_view = '\n';
+      history = '';
       break;
     default:
       write(`Command not found: ${cmd}`);
