@@ -16,7 +16,9 @@ localStorage.setItem('username', username);
 const getPrompt = () => `<span class="prompt">${username}@${hostname}:${cwd}$</span> `;
 
 const write = (text) => {
+  if (buffer.trim() =! ""){
     history += text + '\n';
+  }
 };
 
 const render = () => {
