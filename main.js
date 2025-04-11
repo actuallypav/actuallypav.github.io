@@ -4,17 +4,24 @@ let cwd = '~';
 let buffer = '';
 let history = '';
 
+let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
+let hostname = 'ubuntu-web-terminal';
+
+localStorage.setItem('username', username);
+
+const getPrompt = () => `<span class="prompt">${username}@${hostname}:${cwd}$</span> `;
+
 const write = (text) => {
   history += text + '\n';
 };
 
 const render = () => {
-  term.innerHTML = history + `<span class="prompt">${cwd} $</span> ${buffer}_`;
+  term.innerHTML = history + getPrompt() + `${buffer}_`;
   term.scrollTop = term.scrollHeight;
 };
 
 const runCommand = (cmd) => {
-  write(`<span class="prompt">${cwd} $</span> ${cmd}`);
+  write(getPrompt() + cmd);
 
   switch (cmd) {
     case 'help':
