@@ -37,6 +37,9 @@ const runCommand = (cmd) => {
         case 'clear':
             history = '';
             break;
+        case '':
+          write('\n')
+          break;
         default:
             write(`Command not found: ${cmd}`);
     }
@@ -53,6 +56,8 @@ document.addEventListener('keydown', (e) => {
             commandHistory.push(buffer.trim());
             runCommand(buffer.trim());
             historyIndex = commandHistory.length;
+        } else if (buffer.trim() === "") {
+            runCommand(buffer.trim())
         }
     } else if (e.key === 'ArrowUp') {
         if (historyIndex > 0) {
