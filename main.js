@@ -5,9 +5,12 @@ const term = document.getElementById('terminal');
 
 let cwd = '~';
 let buffer = '';
-let history = '';
-let commandHistory = [];
-let historyIndex = -1;
+let history = ''; //history of everything on screen - zeroed out with clear command
+let commandHistory = []; //history of commands used
+let historyIndex = -1; //index for the above - start on nothing
+let cursorPos = 0;
+let idleTimer; 
+let isIdle = true;
 
 let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
 let hostname = 'ubuntu-web-terminal';
@@ -28,12 +31,25 @@ const write = (text, clear = false) => {
     render();
 };
 
+const resetIdle = () => {
+  isIdle = false;
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    isIdle = true;
+    render();
+  }, 500);
+};
+
 const render = () => {
-  term.innerHTML = history + getPrompt() + `${buffer}_`;
+  const beforeCursor = buffer.slice(0, cursorPos);
+  const atCursor = buffer.charAt(cursorPos) || ' ';
+  const afterCursor = buffer.slice(cursorPos + 1);
+  term.innerHTML = history + getPrompt() + `${beforeCursor}<span class="cursor${isIdle ? ' blink' : ''}">${atCursor}</span>${afterCursor}`;
   term.scrollTop = term.scrollHeight;
 };
 
 document.addEventListener('keydown', (e) => {
+
     if (e.key === 'Backspace') {
       buffer = buffer.slice(0, -1);
     }
@@ -49,29 +65,46 @@ document.addEventListener('keydown', (e) => {
       runCommand(trimmed, username, hostname, write);
       buffer = '';
       historyIndex = commandHistory.length;
+      cursorPos = 0;
     }
 
     else if (e.key === 'ArrowUp') {
       if (historyIndex > 0) {
         historyIndex--;
         buffer = commandHistory[historyIndex];
+        cursorPos = buffer.length;
       } else if (historyIndex === 0 && commandHistory.length >= 0) {
         ubuError.play();
       }
     }
 
     else if (e.key === 'ArrowDown') {
-      if (historyIndex < commandHistory.length) {
+      if (historyIndex < commandHistory.length - 1) {
         historyIndex++;
-        if (historyIndex < commandHistory.length) {
-          buffer = commandHistory[historyIndex];
-        } else {
-          buffer = '';
-        }
-      } else if (historyIndex === commandHistory.length && buffer === "") {
-        ubuError.play();
-      } else {
+        buffer = commandHistory[historyIndex];
+        cursorPos = buffer.length;
+      } else if (historyIndex === commandHistory.length - 1) {
+        historyIndex++;
         buffer = '';
+        cursorPos = 0;
+      } else {
+        ubuError.play();
+      }
+    }
+
+    else if (e.key === 'ArrowRight') {
+      if (cursorPos < buffer.length) {
+        cursorPos++;
+      } else {
+        ubuError.play();
+      }
+    }
+
+    else if (e.key === 'ArrowLeft') {
+      if (cursorPos > 0) {
+        cursorPos--;
+      } else {
+        ubuError.play();
       }
     }
     //TODO: functionality for left and right with error noises
@@ -80,9 +113,11 @@ document.addEventListener('keydown', (e) => {
     //TODO: cjange color of output
 
     else if (e.key.length === 1) {
-      buffer += e.key;
+      buffer = buffer.slice(0, cursorPos) + e.key + buffer.slice(cursorPos);
+      cursorPos++;
     }
     render();
+    resetIdle(); //reset idle when we start pressing
 });
   
 
