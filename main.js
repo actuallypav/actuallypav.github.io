@@ -147,7 +147,6 @@ document.addEventListener('keydown', (e) => {
       cursorPos++;
     }
 
-    //TODO: add in a handling so if i do cd resume/ it doesn't save that in pwd
     else if (e.key === 'Tab') {
       e.preventDefault();
     
@@ -176,7 +175,7 @@ document.addEventListener('keydown', (e) => {
     
           if (matches.length === 1) {
             const completedPath = inputPath.replace(/[^\/]*$/, matches[0]);
-            buffer = `${cmd} ${completedPath}`;
+            buffer = `${cmd} ${completedPath}/`;
             cursorPos = buffer.length;
 
           } else if (matches.length > 1) {
