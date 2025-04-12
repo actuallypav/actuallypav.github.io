@@ -48,3 +48,8 @@ body {
   .cursor.blink {
     animation: blink 1.5s step-start infinite;
   }
+
+  .directory {
+    color: #2e2f6e;
+    font-weight: bold;
+  }
