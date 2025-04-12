@@ -1,7 +1,6 @@
 // import help from './commands/help.js';
 // import about from './commands/about.js';
 // import clear from './commands/clear.js';
-import('./commands/ls.js')
 // const commandMap = {
 //     help,
 //     about,
