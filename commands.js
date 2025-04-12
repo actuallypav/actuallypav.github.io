@@ -33,5 +33,4 @@ export function runCommand(cmdLine, username, hostname, write, env) {
     }
 }
 
-// Export the descriptions for use in help.js
 export { commandDescriptions };
