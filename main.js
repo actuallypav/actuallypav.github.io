@@ -1,6 +1,6 @@
 // main.js
 import { initializeTerminal } from './UI/layout.js';
-import { runCommand } from './commands.js';
+import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
 
 const term = document.getElementById('terminal');
@@ -56,6 +56,7 @@ const render = () => {
   term.scrollTop = term.scrollHeight;
 };
 
+//TODO: split to a seperate file
 document.addEventListener('keydown', (e) => {
     const scrollTop = term.scrollTop;
 
@@ -145,8 +146,76 @@ document.addEventListener('keydown', (e) => {
       buffer = buffer.slice(0, cursorPos) + e.key + buffer.slice(cursorPos);
       cursorPos++;
     }
+
+    //TODO: add in a handling so if i do cd resume/ it doesn't save that in pwd
+    //TODO: add in tab help
+    else if (e.key === 'Tab') {
+      e.preventDefault();
+    
+      const parts = buffer.trim().split(' ');
+      const cmd = parts[0];
+      const inputPath = parts[1] || '';
+    
+      if (cmd === 'ls' || cmd === 'cd') {
+        let basePath = path;
+        let partial = inputPath;
+    
+        if (inputPath.startsWith('/')) {
+          basePath = inputPath.slice(0, inputPath.lastIndexOf('/')) || '/';
+          partial = inputPath.split('/').pop();
+        } else if (inputPath.includes('/')) {
+          basePath = path + '/' + inputPath.slice(0, inputPath.lastIndexOf('/'));
+          partial = inputPath.split('/').pop();
+        }
+    
+        const node = getNodeFromPath(basePath);
+    
+        if (node && node.children) {
+          const matches = Object.keys(node.children).filter(name =>
+            name.startsWith(partial)
+          );
+    
+          if (matches.length === 1) {
+            const completedPath = inputPath.replace(/[^\/]*$/, matches[0]);
+            buffer = `${cmd} ${completedPath}`;
+            cursorPos = buffer.length;
+
+          } else if (matches.length > 1) {
+            const directories = matches.filter(name =>
+              node.children[name].type === 'dir'
+            ).sort();
+    
+            const files = matches.filter(name =>
+              node.children[name].type === 'file'
+            ).sort();
+    
+            const sortedMatches = [...directories, ...files];
+    
+            const formattedOutput = sortedMatches.map(name => {
+              const childNode = node.children[name];
+              if (childNode.type === 'dir') {
+                return `<span class="directory">${name}/</span>`;
+              } else {
+                return name;
+              }
+            }).join('  ');
+    
+            write(getPrompt() + buffer, false);
+    
+            write(formattedOutput); 
+          } else {
+            ubuError.play();
+          }
+        } else {
+          ubuError.play();
+        }
+      } else {
+        ubuError.play();
+      }
+    }
+    
     render();
-    resetIdle(); //reset idle when we start pressing
+    resetIdle();
 });
   
 
