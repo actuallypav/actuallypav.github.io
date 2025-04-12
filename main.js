@@ -57,6 +57,7 @@ const render = () => {
 };
 
 document.addEventListener('keydown', (e) => {
+    const scrollTop = term.scrollTop;
 
     if (e.key === 'Backspace') {
       buffer = buffer.slice(0, -1);
@@ -94,6 +95,7 @@ document.addEventListener('keydown', (e) => {
       } else if (historyIndex === 0 && commandHistory.length >= 0) {
         ubuError.play();
       }
+      term.scrollTop = scrollTop;
     }
 
     else if (e.key === 'ArrowDown') {
