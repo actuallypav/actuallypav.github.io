@@ -32,6 +32,10 @@ export default function cd(write, args, { cwd, path, fs, getNodeFromPath, update
     } else {
         //relative path
         newPath = path.endsWith('/') ? path + inputPath : path + '/' + inputPath;
+
+        if (newPath.length > 1 && newPath.endsWith('/')) {
+            newPath = newPath.slice(0, -1);
+        }
     }
 
     const targetNode = getNodeFromPath(newPath)
