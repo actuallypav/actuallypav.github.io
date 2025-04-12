@@ -1,8 +1,10 @@
 // main.js
+import { initializeTerminal } from './UI/layout.js';
 import { runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
 
 const term = document.getElementById('terminal');
+initializeTerminal(term)
 
 let cwd = '~';
 let buffer = '';
