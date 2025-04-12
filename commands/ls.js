@@ -20,7 +20,7 @@ export default function ls(write, args, { cwd, fs }) {
                     return child;
                 }
             });
-            write(formattedChildren.join('\n'));
+            write(formattedChildren.join('  '));
         } else {
             write('Directory is empty.');
         }
