@@ -60,7 +60,20 @@ document.addEventListener('keydown', (e) => {
     const scrollTop = term.scrollTop;
 
     if (e.key === 'Backspace') {
-      buffer = buffer.slice(0, -1);
+      if (cursorPos > 0) {
+        buffer = buffer.slice(0, cursorPos - 1) + buffer.slice(cursorPos);
+        cursorPos--;
+      } else {
+        ubuError.play();
+      }
+    }
+
+    else if (e.key === 'Delete') {
+      if (cursorPos < buffer.length) {
+        buffer = buffer.slice(0, cursorPos) + buffer.slice(cursorPos + 1);
+      } else {
+        ubuError.play();
+      }
     }
 
     else if (e.key === 'Enter') {
