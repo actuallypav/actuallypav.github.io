@@ -1,5 +1,7 @@
 import { getNodeFromPath } from "../vfs.js";
 
+export const description = 'List files and directories in the current directory.';
+
 export default function ls(write, args, { cwd, fs }) {
     let pathToCheck = '/home';
 
