@@ -75,7 +75,7 @@ document.addEventListener('keydown', (e) => {
           cwd = path.replace(`/home/${username}`, `~`);
         }
       });
-      
+
       buffer = '';
       historyIndex = commandHistory.length;
       cursorPos = 0;
