@@ -148,7 +148,6 @@ document.addEventListener('keydown', (e) => {
     }
 
     //TODO: add in a handling so if i do cd resume/ it doesn't save that in pwd
-    //TODO: add in tab help
     else if (e.key === 'Tab') {
       e.preventDefault();
     
@@ -208,6 +207,18 @@ document.addEventListener('keydown', (e) => {
           }
         } else {
           ubuError.play();
+        }
+      } else if (cmd === 'help') {
+        const allCommands = Object.keys(commandDescriptions);
+        const matches =allCommands.filter(name => name.startsWith(inputPath));
+
+        if (matches.length === 1) {
+          buffer = `help ${matches[0]}`;
+          cursorPos = buffer.length;
+        } else if (matches.length > 1) {
+          const formattedOutput = matches.join('  ');
+          write(getPrompt() + buffer, false);
+          write(formattedOutput);
         }
       } else {
         ubuError.play();
