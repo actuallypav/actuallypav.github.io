@@ -1,5 +1,6 @@
 // main.js
 import { runCommand } from './commands.js';
+import { fs, getNodeFromPath } from './vfs.js';
 
 const term = document.getElementById('terminal');
 
@@ -11,6 +12,7 @@ let historyIndex = -1; //index for the above - start on nothing
 let cursorPos = 0;
 let idleTimer; 
 let isIdle = true;
+let path = '/home'; //simulated abs path
 
 let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
 let hostname = 'ubuntu-web-terminal';
@@ -19,8 +21,9 @@ var ubuError = new Audio('./audio/bell.oga');
 
 localStorage.setItem('username', username);
 
-const getPrompt = () => `<span class="prompt-user">${username}@${hostname}</span>` +
-                        `:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
+const getPrompt = () =>
+  `<span class="prompt-user">${username}@${hostname}</span>` +
+`:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
 
 const write = (text, clear = false) => {
     if (clear) {
@@ -62,7 +65,17 @@ document.addEventListener('keydown', (e) => {
         commandHistory.push(trimmed);
       }
   
-      runCommand(trimmed, username, hostname, write);
+      runCommand(trimmed, username, hostname, write, {
+        cwd,
+        path,
+        fs,
+        getNodeFromPath,
+        updatePath: (newPath) => {
+          path = newPath;
+          cwd = path.replace(`/home/${username}`, `~`);
+        }
+      });
+      
       buffer = '';
       historyIndex = commandHistory.length;
       cursorPos = 0;
@@ -107,10 +120,6 @@ document.addEventListener('keydown', (e) => {
         ubuError.play();
       }
     }
-    //TODO: functionality for left and right with error noises
-    //TODO: change underscore to be the box that highlights
-    //TODO: make screen flash on error
-    //TODO: cjange color of output
 
     else if (e.key.length === 1) {
       buffer = buffer.slice(0, cursorPos) + e.key + buffer.slice(cursorPos);
