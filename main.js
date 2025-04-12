@@ -6,7 +6,9 @@ import { fs, getNodeFromPath } from './vfs.js';
 const term = document.getElementById('terminal');
 initializeTerminal(term)
 
-let cwd = '~';
+let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
+let hostname = 'ubuntu-web-terminal';
+let cwd = `/home`; 
 let buffer = '';
 let history = ''; //history of everything on screen - zeroed out with clear command
 let commandHistory = []; //history of commands used
@@ -16,16 +18,17 @@ let idleTimer;
 let isIdle = true;
 let path = '/home'; //simulated abs path
 
-let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
-let hostname = 'ubuntu-web-terminal';
+localStorage.setItem('username', username);
+
+//dynamically replace 'user' with the actual username
+fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
+delete fs['/'].children['home'].children['user'];
 
 var ubuError = new Audio('./audio/bell.oga');
 
-localStorage.setItem('username', username);
-
-const getPrompt = () =>
+const getPrompt = () => 
   `<span class="prompt-user">${username}@${hostname}</span>` +
-`:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
+  `:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
 
 const write = (text, clear = false) => {
     if (clear) {
