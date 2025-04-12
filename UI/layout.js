@@ -7,9 +7,11 @@ export function initializeTerminal(terminal) {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
+    // Adjust font size and height for mobile vs desktop
     if (isMobileDevice()) {
-      terminal.style.fontSize = '14px';
-      terminal.style.height = `${screenHeight - 50}px`; // Adjust height to fit the screen
+      terminal.style.fontSize = '14px';  // Smaller font size for mobile devices
+      terminal.style.height = `${screenHeight - 50}px`;  // Adjust terminal height for mobile
+      terminal.style.padding = '10px';  // Add some padding for better interaction on mobile
     } else {
       if (screenWidth < 600) {
         terminal.style.fontSize = '12px';
@@ -18,12 +20,15 @@ export function initializeTerminal(terminal) {
       } else {
         terminal.style.fontSize = '20px';
       }
-      terminal.style.height = `${screenHeight - 100}px`; // Adjust height to fit the screen
+      terminal.style.height = `${screenHeight - 100}px`;  // Adjust height for desktop
     }
 
-    // Make sure the contenteditable div has a scrollable area
+    // Make sure the contenteditable div is large enough and scrollable
     terminal.style.overflowY = 'auto';
-    terminal.style.whiteSpace = 'pre-wrap'; // Keep the text wrapping properly.
+    terminal.style.whiteSpace = 'pre-wrap';  // Allow text wrapping
+    terminal.style.width = '100%';  // Full width
+    terminal.style.maxWidth = '100%';  // Prevent overflow
+    terminal.style.position = 'relative';  // Ensure proper positioning
   }
 
   adjustTerminalLayout();
@@ -35,9 +40,10 @@ export function initializeTerminal(terminal) {
       const text = event.target.innerText;
       console.log('User is typing:', text);
     });
-    // Ensure that we handle the cursor position correctly for mobile
+
+    // Ensure scrolling down to the bottom when typing
     terminal.addEventListener('focus', () => {
-      terminal.scrollTop = terminal.scrollHeight; // Keep the terminal scrolled to the bottom when typing.
+      terminal.scrollTop = terminal.scrollHeight;
     });
   }
 
