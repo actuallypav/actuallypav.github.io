@@ -12,9 +12,13 @@ export function runCommand(cmd, username, hostname, write) {
     const command = commandMap[cmd];
 
     if (command) {
-        command(write);
+        if (cmd === 'clear') {
+            command(write, true);  // explicitly pass true to trigger clear
+        } else {
+            command(write);
+        }
     }
-    else if (cmd != '') {
+    else if (cmd !== '') {
         write(`${cmd}: command not found`);
     }
-  }
+}

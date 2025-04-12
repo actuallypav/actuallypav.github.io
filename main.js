@@ -16,7 +16,8 @@ var ubuError = new Audio('./audio/bell.oga');
 
 localStorage.setItem('username', username);
 
-const getPrompt = () => `<span class="prompt">${username}@${hostname}:${cwd}$</span> `;
+const getPrompt = () => `<span class="prompt-user">${username}@${hostname}</span>` +
+                        `:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
 
 const write = (text, clear = false) => {
     if (clear) {
