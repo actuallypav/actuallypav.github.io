@@ -1,4 +1,3 @@
-// main.js
 import { initializeTerminal } from './UI/layout.js';
 import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
@@ -183,10 +182,19 @@ document.addEventListener('keydown', (e) => {
               if (node.children[matches[0]].type === 'file') {
                 buffer = `${cmd} ${completedPath}`;
                 cursorPos = buffer.length;
+              } else if (node.children[matches[0]].type === 'repo') {
+                buffer = `${cmd} ${completedPath}`;
+                cursorPos = buffer.length;
+              } else if (node.children[matches[0]].type === 'cv') {
+                buffer = `${cmd} ${completedPath}`;
+                cursorPos = buffer.length;
               } else {
                 buffer = `${cmd} ${completedPath}/`;
                 cursorPos = buffer.length;
               }
+              
+              
+              
             }
 
           } else if (matches.length > 1) {
@@ -197,8 +205,16 @@ document.addEventListener('keydown', (e) => {
             const files = matches.filter(name =>
               node.children[name].type === 'file'
             ).sort();
+
+            const repos = matches.filter(name =>
+              node.children[name].type === 'repo'
+            ).sort();
+
+            const cv = matches.filter(name =>
+              node.children[name].type === 'cv'
+            ).sort();
     
-            const sortedMatches = [...directories, ...files];
+            const sortedMatches = [...directories, ...files, ...repos, ...cv];
     
             const formattedOutput = sortedMatches.map(name => {
               const childNode = node.children[name];
@@ -240,5 +256,5 @@ document.addEventListener('keydown', (e) => {
 });
   
 
-write('Ubuntu 22.04 Web Terminal\nType "help" to begin.');
+write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" to begin.');
 render();
