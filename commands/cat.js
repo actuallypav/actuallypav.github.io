@@ -29,7 +29,8 @@ export default async function cat(write, args, env) {
             if (response.ok) {
                 let readmeContent = await response.text();
                 const filteredContent = readmeContent.replace(/<img[^>]*>/gi, '');
-                write(readmeContent);
+                const htmlContent = marked.parse(filteredContent);
+                write(htmlContent);
             } else {
                 write(`cat: ${args[0]}: Unable to fetch the project.`);
             }
