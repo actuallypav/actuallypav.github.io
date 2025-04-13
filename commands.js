@@ -12,7 +12,7 @@ const loadCommand = (commandName) => {
         });
 };
 
-const commandNames = ['help', 'about', 'clear', 'ls', 'cd', 'cat'];
+const commandNames = ['help', 'about', 'clear', 'ls', 'cd', 'cat', 'info'];
 
 Promise.all(commandNames.map(loadCommand))
     .then(() => {
