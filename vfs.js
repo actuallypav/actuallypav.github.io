@@ -5,9 +5,10 @@ export const fs = {
       'home': {
         type: 'dir',
         children: {
-          'file2.txt': {
+          'hello_world.txt': {
             type: 'file',
-            content: 'This is file2.txt content' 
+            content: `Why did the developer go broke?
+Because he used up all his cache printing "Hello, World!" in 15 different languages.`
           },
           'user': {
             type: 'dir',

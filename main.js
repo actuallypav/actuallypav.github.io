@@ -257,5 +257,5 @@ document.addEventListener('keydown', (e) => {
 });
   
 
-write('Ubuntu 22.04 Web Terminal\nType "help" to begin.');
+write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" to begin.');
 render();
