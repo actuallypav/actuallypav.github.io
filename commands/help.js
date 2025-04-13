@@ -16,7 +16,16 @@ export const description = `help: help [command ...]
 export default function help(write, args) {
     if (args.length === 0) {
         const allCommands = Object.keys(commandDescriptions).join('\n');
-        write('Available commands:\n' + allCommands);
+        write(`
+PAV-GNU Emulator, version 1.0.0 (x86_64-pc-linux-pav)
+These shell commands are defined internally. Type 'help' to see this list.
+Type 'help <command>' to get more information about the function '<command>'.
+Use 'info pav' to learn more about this amazing terminal emulator.
+            
+A star (*) next to a command means that it is currently disabled.
+            
+${allCommands}
+`);
     } else {
         const cmd = args[0];
         if (commandDescriptions[cmd]) {
