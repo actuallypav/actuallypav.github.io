@@ -99,17 +99,13 @@ async function fetchRepoContent(repoName, write) {
         const response = await fetch(githubUrl);
         if (response.ok) {
             let readmeContent = await response.text();
-            readmeContent = stripEmptyLines(readmeContent); // Strip empty lines
 
-            // Extract the "Overview" section
             const overviewContent = extractOverviewSection(readmeContent);
 
             if (overviewContent) {
-                // Remove images and other unwanted elements if necessary
-                const filteredContent = overviewContent.replace(/<img[^>]*>/gi, ''); // Remove images
+                const filteredContent = overviewContent.replace(/<img[^>]*>/gi, '');
                 const htmlContent = marked.parse(filteredContent);
 
-                // Output the overview section
                 write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Overview of ${repoName} (Repository)</a></h3>`);
                 write(htmlContent);
             } else {
@@ -123,17 +119,12 @@ async function fetchRepoContent(repoName, write) {
     }
 }
 
-function stripEmptyLines(content) {
-    return content.replace(/^\s*[\r\n]/gm, '');
-}
-
 function extractOverviewSection(content) {
-    // Regular expression to match the "Overview" section and its content
     const overviewRegex = /## Overview\s*(.*?)(\n##|\n#|\n$)/s;
     const match = content.match(overviewRegex);
 
     if (match && match[1]) {
-        return match[1].trim(); // Return the content of the Overview section
+        return match[1].trim();
     }
-    return null; // Return null if no Overview section found
+    return null;
 }
