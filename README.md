@@ -13,5 +13,3 @@ The terminal currently supports basic commands, displaying my projects and exper
 I plan to expand the terminal's functionality by adding more interactive features, aiming to provide a dynamic user experience.
 
 Feel free to explore and discover more about my work.
-
---- 
