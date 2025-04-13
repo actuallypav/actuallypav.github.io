@@ -16,23 +16,23 @@ export const fs = {
                 type: 'dir',
                 children: {
                   'profile.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is profile.txt content'  
                   },
                   'experience.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is experience.txt content' 
                   },
                   'technical_skills.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is techincal_skills.txt content'
                   },
                   'education.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is education.txt content'
                   },
                   'languages.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is languages.txt content'
                   },
                 }

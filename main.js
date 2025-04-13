@@ -183,10 +183,19 @@ document.addEventListener('keydown', (e) => {
               if (node.children[matches[0]].type === 'file') {
                 buffer = `${cmd} ${completedPath}`;
                 cursorPos = buffer.length;
+              } else if (node.children[matches[0]].type === 'repo') {
+                buffer = `${cmd} ${completedPath}`;
+                cursorPos = buffer.length;
+              } else if (node.children[matches[0]].type === 'cv') {
+                buffer = `${cmd} ${completedPath}`;
+                cursorPos = buffer.length;
               } else {
                 buffer = `${cmd} ${completedPath}/`;
                 cursorPos = buffer.length;
               }
+              
+              
+              
             }
 
           } else if (matches.length > 1) {
@@ -201,8 +210,12 @@ document.addEventListener('keydown', (e) => {
             const repos = matches.filter(name =>
               node.children[name].type === 'repo'
             ).sort();
+
+            const cv = matches.filter(name =>
+              node.children[name].type === 'cv'
+            ).sort();
     
-            const sortedMatches = [...directories, ...files, ...repos];
+            const sortedMatches = [...directories, ...files, ...repos, ...cv];
     
             const formattedOutput = sortedMatches.map(name => {
               const childNode = node.children[name];
