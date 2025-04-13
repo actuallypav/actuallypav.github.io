@@ -56,7 +56,6 @@ const render = () => {
   term.scrollTop = term.scrollHeight;
 };
 
-//TODO: split to a seperate file
 document.addEventListener('keydown', (e) => {
     const scrollTop = term.scrollTop;
 
@@ -78,7 +77,7 @@ document.addEventListener('keydown', (e) => {
     }
 
     else if (e.key === 'Enter') {
-      const trimmed = buffer.trim();
+      const trimmed = buffer.trim().toLowerCase();
       write(getPrompt() + trimmed);
   
       if (trimmed !== "") {
@@ -143,6 +142,7 @@ document.addEventListener('keydown', (e) => {
     }
 
     else if (e.key.length === 1) {
+      const lowerKey = e.key.toLowerCase();
       buffer = buffer.slice(0, cursorPos) + e.key + buffer.slice(cursorPos);
       cursorPos++;
     }
@@ -151,10 +151,10 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
     
       const parts = buffer.trim().split(' ');
-      const cmd = parts[0];
+      const cmd = parts[0].toLowerCase();
       const inputPath = parts[1] || '';
     
-      if (cmd === 'ls' || cmd === 'cd') {
+      if (cmd === 'ls' || cmd === 'cd' || cmd === 'cat') {
         let basePath = path;
         let partial = inputPath;
     
@@ -174,9 +174,20 @@ document.addEventListener('keydown', (e) => {
           );
     
           if (matches.length === 1) {
-            const completedPath = inputPath.replace(/[^\/]*$/, matches[0]);
-            buffer = `${cmd} ${completedPath}/`;
-            cursorPos = buffer.length;
+            if (cmd !== 'cat') {
+              const completedPath = inputPath.replace(/[^\/]*$/, matches[0]);
+              buffer = `${cmd} ${completedPath}/`;
+              cursorPos = buffer.length;
+            } else {
+              const completedPath = inputPath.replace(/[^\/]*$/, matches[0]);
+              if (node.children[matches[0]].type === 'file') {
+                buffer = `${cmd} ${completedPath}`;
+                cursorPos = buffer.length;
+              } else {
+                buffer = `${cmd} ${completedPath}/`;
+                cursorPos = buffer.length;
+              }
+            }
 
           } else if (matches.length > 1) {
             const directories = matches.filter(name =>
