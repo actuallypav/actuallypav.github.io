@@ -32,7 +32,7 @@ export default async function cat(write, args, env) {
 
                 if (fileNode.type === 'file') {
                     const fileContent = fileNode.content || '';
-                    write(`\n--- Content of ${file} ---\n`);
+                    write(`\n<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Content of ${repoName} (Repository)</a></h3>`);
                     write(fileContent);
                 } else if (fileNode.type === 'repo') {
                     const repoNameWithExtension = file;
@@ -83,6 +83,7 @@ async function fetchRepoContent(repoName, write) {
         const response = await fetch(githubUrl);
         if (response.ok) {
             let readmeContent = await response.text();
+            readmeContent = stipHyperLinks(readmeContent);
             const filteredContent = readmeContent.replace(/<img[^>]*>/gi, '');
             const htmlContent = marked.parse(filteredContent);
             write(`\n--- Content of ${repoName} (Repository) ---\n`);
@@ -93,4 +94,8 @@ async function fetchRepoContent(repoName, write) {
     } catch (error) {
         write(`cat: Error fetching README.md for repo ${repoName}: ${error.message}`);
     }
+}
+
+function stipHyperLinks(content) {
+    return content.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
 }
