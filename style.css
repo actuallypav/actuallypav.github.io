@@ -14,7 +14,42 @@ body {
     overflow-y: auto;
   }
   
-  .prompt {
-    color: #FF6C00;
+  .prompt-user {
+    color: #326E57;
+    font-weight: bold;
   }
   
+  .prompt-path {
+    color: #2e2f6e;
+    font-weight: bold;
+  }
+
+  .prompt-symbol {
+    color: #ffffff;
+  }
+
+  .cursor {
+    color: #000000;
+    background-color: #ccc;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    0%, 49% {
+      background-color: #ccc;
+      color: #000000;
+    }
+    50%, 100% {
+      background-color: transparent;
+      color: inherit;
+    }
+  }
+
+  .cursor.blink {
+    animation: blink 1.5s step-start infinite;
+  }
+
+  .directory {
+    color: #2e2f6e;
+    font-weight: bold;
+  }
