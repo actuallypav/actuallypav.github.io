@@ -1,4 +1,3 @@
-// main.js
 import { initializeTerminal } from './UI/layout.js';
 import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
