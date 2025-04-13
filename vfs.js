@@ -2,6 +2,10 @@ export const fs = {
   '/': {
     type: 'dir',
     children: {
+      'theres_nowt_here.txt': {
+            type: 'file',
+            content: 'What are you looking for? Did you find it?'
+          },
       'home': {
         type: 'dir',
         children: {
