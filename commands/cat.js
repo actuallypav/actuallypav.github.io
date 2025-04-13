@@ -1,3 +1,17 @@
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true, //enable GitHub flavored markdown
+    tables: true, //enable tables
+    breaks: true, //converts newlines to <br> tags, so markdown line breaks are supported
+    pedantic: false, //allows HTML elements inside markdown
+    sanitize: false, //allow raw HTML in markdown
+    smartLists: true, //enable smart lists (bullets and numbered)
+    smartypants: false, //use smart quotes and dashes
+    highlight: function(code, language) {
+        return code;
+    }
+});
+
 export const description = "";
 
 export default async function cat(write, args, env) {
@@ -32,13 +46,14 @@ export default async function cat(write, args, env) {
 
                 if (fileNode.type === 'file') {
                     const fileContent = fileNode.content || '';
-                    write(`\n<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Content of ${repoName} (Repository)</a></h3>`);
+                    write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank" style="text-decoration:none;">Content of ${repoName}</a></h3>`);
                     write(fileContent);
                 } else if (fileNode.type === 'repo') {
                     const repoNameWithExtension = file;
                     const repoName = repoNameWithExtension.substring(0, repoNameWithExtension.lastIndexOf('.'));
                     console.log(`Attempting to fetch README.md for repo: ${repoName}`);
                     await fetchRepoContent(repoName, write);
+                    write('<hr>')
                 }
             }
         } else {
@@ -50,6 +65,7 @@ export default async function cat(write, args, env) {
         const repoName = repoNameWithExtension.substring(0, repoNameWithExtension.lastIndexOf('.'));
         console.log(`Attempting to fetch README.md for repo: ${repoName}`);
         await fetchRepoContent(repoName, write);
+        write('<hr>')
     } 
     else if (node.type === 'file') {
         write(node.content || '');
@@ -83,11 +99,22 @@ async function fetchRepoContent(repoName, write) {
         const response = await fetch(githubUrl);
         if (response.ok) {
             let readmeContent = await response.text();
-            readmeContent = stipHyperLinks(readmeContent);
-            const filteredContent = readmeContent.replace(/<img[^>]*>/gi, '');
-            const htmlContent = marked.parse(filteredContent);
-            write(`\n--- Content of ${repoName} (Repository) ---\n`);
-            write(htmlContent);
+            readmeContent = stripEmptyLines(readmeContent); // Strip empty lines
+
+            // Extract the "Overview" section
+            const overviewContent = extractOverviewSection(readmeContent);
+
+            if (overviewContent) {
+                // Remove images and other unwanted elements if necessary
+                const filteredContent = overviewContent.replace(/<img[^>]*>/gi, ''); // Remove images
+                const htmlContent = marked.parse(filteredContent);
+
+                // Output the overview section
+                write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Overview of ${repoName} (Repository)</a></h3>`);
+                write(htmlContent);
+            } else {
+                write(`cat: Overview section not found in the README.md for repo ${repoName}.`);
+            }
         } else {
             write(`cat: Unable to fetch README.md for repo ${repoName}.`);
         }
@@ -96,6 +123,17 @@ async function fetchRepoContent(repoName, write) {
     }
 }
 
-function stipHyperLinks(content) {
-    return content.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+function stripEmptyLines(content) {
+    return content.replace(/^\s*[\r\n]/gm, '');
+}
+
+function extractOverviewSection(content) {
+    // Regular expression to match the "Overview" section and its content
+    const overviewRegex = /## Overview\s*(.*?)(\n##|\n#|\n$)/s;
+    const match = content.match(overviewRegex);
+
+    if (match && match[1]) {
+        return match[1].trim(); // Return the content of the Overview section
+    }
+    return null; // Return null if no Overview section found
 }
