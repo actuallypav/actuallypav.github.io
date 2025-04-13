@@ -7,10 +7,7 @@
 As a Security Operations Centre (SOC) Manager, I oversee security monitoring and help improve the organization's overall security posture within a government setting.
 
 ### Responsibilities:
-- Design and implement data governance frameworks to ensure data security and compliance with best practices. 
-- Create and maintain incident response protocols and documentation to support swift, effective responses to security events.
-- Monitor data flows, build interactive dashboards, and develop queries to improve threat detection and analysis within the SIEM environment.
-- Lead a team of analysts, providing mentorship and fostering a culture of continuous improvement and collaboration.
+- TBC
 
 ---
 
