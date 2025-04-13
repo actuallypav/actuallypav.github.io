@@ -197,8 +197,12 @@ document.addEventListener('keydown', (e) => {
             const files = matches.filter(name =>
               node.children[name].type === 'file'
             ).sort();
+
+            const repos = matches.filter(name =>
+              node.children[name].type === 'repo'
+            ).sort();
     
-            const sortedMatches = [...directories, ...files];
+            const sortedMatches = [...directories, ...files, ...repos];
     
             const formattedOutput = sortedMatches.map(name => {
               const childNode = node.children[name];

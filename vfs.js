@@ -1,37 +1,71 @@
 export const fs = {
-    '/': {
-      type: 'dir',
-      children: {
-        'home': {
-          type: 'dir',
-          children: {
-            'file2.txt': {
-              type: 'file',
-              content: 'This is file2.txt content'  // Example content for the file
-            },
-            'user': {
-              type: 'dir',
-              children: {
-                'resume': {
-                  type: 'dir',
-                  children: {
-                    'cv.txt': {
-                      type: 'file',
-                      content: 'This is cv.txt content'  // Example content for cv.txt
-                    }
-                  }
-                },
-                'portfolio': {
-                  type: 'dir',
-                  children: {
-                    'est.txt': {
-                      type: 'file',
-                      content: 'This is est.txt content'  // Example content for est.txt
-                    },
-                    'smiley.txt': {
-                      type: 'file',
-                      content: 'This is smiley.txt content'  // Example content for smiley.txt
-                    }
+  '/': {
+    type: 'dir',
+    children: {
+      'home': {
+        type: 'dir',
+        children: {
+          'file2.txt': {
+            type: 'file',
+            content: 'This is file2.txt content' 
+          },
+          'user': {
+            type: 'dir',
+            children: {
+              'resume': {
+                type: 'dir',
+                children: {
+                  'profile.txt': {
+                    type: 'file',
+                    content: 'This is profile.txt content'  
+                  },
+                  'experience.txt': {
+                    type: 'file',
+                    content: 'This is experience.txt content' 
+                  },
+                  'technical_skills.txt': {
+                    type: 'file',
+                    content: 'This is techincal_skills.txt content'
+                  },
+                  'education.txt': {
+                    type: 'file',
+                    content: 'This is education.txt content'
+                  },
+                  'languages.txt': {
+                    type: 'file',
+                    content: 'This is languages.txt content'
+                  },
+                }
+              },
+              'portfolio': {
+                type: 'dir',
+                children: {
+                  'est_service.tf': {
+                    type: 'repo',
+                  },
+                  'smiley_kivy.py': {
+                    type: 'repo'
+                  },
+                  'tf-sync.sh': {
+                    type: 'repo'
+                  },
+                  'esp_iot.h': {
+                    type: 'repo'
+                  },
+                  'data-board.tf': {
+                    type: 'repo',
+                  },
+                  'actuallypav.github.io.js': {
+                    type: 'repo',
+                  },
+                }
+              },
+              'contact': {
+                type: 'dir',
+                children: {
+                  'contact.txt': {
+                    type: 'file',
+                    content: 'This is contact.txt content'
                   }
                 }
               }
@@ -40,7 +74,9 @@ export const fs = {
         }
       }
     }
-  };
+  }
+};
+
 
   export function getNodeFromPath(p, fsRoot = fs['/']) {
     const parts = p.split('/').filter(Boolean);
