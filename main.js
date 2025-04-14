@@ -1,6 +1,8 @@
 import { initializeTerminal } from './UI/layout.js';
 import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
+import { terminalState } from './terminalContext.js';
+import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
 
 const term = document.getElementById('terminal');
 initializeTerminal(term)
@@ -19,13 +21,15 @@ let path = '/home'; //simulated abs path
 
 localStorage.setItem('username', username);
 
+
+
 //dynamically replace 'user' with the actual username
 fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
 delete fs['/'].children['home'].children['user'];
 
 var ubuError = new Audio('./audio/bell.oga');
 
-const getPrompt = () => 
+export const getPrompt = () => 
   `<span class="prompt-user">${username}@${hostname}</span>` +
   `:<span class="prompt-path">${cwd}</span><span class="prompt-symbol">$</span> `;
 
@@ -254,7 +258,31 @@ document.addEventListener('keydown', (e) => {
     render();
     resetIdle();
 });
-  
 
-write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" to begin.');
+//export bits
+terminalState.username = username;
+
+Object.defineProperty(terminalState, 'buffer', {
+  get: () => buffer,
+  set: (val) => buffer = val
+});
+
+Object.defineProperty(terminalState, 'cursorPos', {
+  get: () => cursorPos,
+  set: (val) => cursorPos = val
+});
+
+//share path state
+const updatePathRef = {
+  getPath: () => path,
+  setPath: (p) => path = p,
+  getCwd: () => cwd,
+  setCwd: (c) => cwd = c
+};
+
+initQuickbarTerminalBindings(term, username, hostname, write, updatePathRef);
+
+write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alternatively "Right-Click" on "Portfolio" or "Resume" to begin.');
 render();
+
+terminalState.render = render;

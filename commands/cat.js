@@ -93,7 +93,7 @@ export default async function cat(write, args, env) {
         } else {
             write(`cat: No files matching ${args[0]}`);
         }
-    } 
+    }
     else if (node.type === 'repo') {
         const repoNameWithExtension = cleanParts[cleanParts.length - 1];
         const repoName = repoNameWithExtension.substring(0, repoNameWithExtension.lastIndexOf('.'));
@@ -103,8 +103,11 @@ export default async function cat(write, args, env) {
     } 
     else if (node.type === 'cv') {
         const cvFile = cleanParts[cleanParts.length - 1];
+        console.log('[DEBUG] Entered CV block for:', cvFile);
         const mdFileName = cvFile.replace('.txt', '.md');
-        const mdPath = `../resume/${mdFileName}`;
+        const isContact = cvFile === 'contact.txt';
+        const mdPath = isContact ? `../quicklinks/${mdFileName}`:`../resume/${mdFileName}`;
+        console.log('[DEBUG] mdPath resolved to:', mdPath);
         try {
             const response = await fetch(mdPath);
             if (response.ok) {
