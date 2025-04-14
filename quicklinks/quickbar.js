@@ -8,6 +8,7 @@ const links = document.querySelectorAll('#quick-bar a');
 
 const scripts = {
     'Resume': [
+    'clear',
     'cd /home',
     'ls',
     'cd ${username}',
@@ -17,6 +18,7 @@ const scripts = {
     'cat *'
   ],
   'Portfolio': [
+    'clear',
     'cd /home',
     'ls',
     'cd ${username}',

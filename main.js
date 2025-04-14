@@ -282,7 +282,7 @@ const updatePathRef = {
 
 initQuickbarTerminalBindings(term, username, hostname, write, updatePathRef);
 
-write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" to begin.');
+write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alternatively "Right-Click" on "Portfolio" or "Resume" to begin.');
 render();
 
 terminalState.render = render;
