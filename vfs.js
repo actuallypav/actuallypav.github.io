@@ -69,7 +69,7 @@ Because he used up all his cache printing "Hello, World!" in 15 different langua
                 type: 'dir',
                 children: {
                   'contact.txt': {
-                    type: 'file',
+                    type: 'cv',
                     content: 'This is contact.txt content'
                   }
                 }

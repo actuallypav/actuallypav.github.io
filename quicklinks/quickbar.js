@@ -27,6 +27,16 @@ const scripts = {
     'ls',
     'cat *'
   ],
+  'LinkedIn': [
+    'clear',
+    'cd /home',
+    'ls',
+    'cd ${username}',
+    'ls',
+    'cd contact',
+    'ls',
+    'cat contact.txt'
+  ]
 };
 
 export function initQuickbarTerminalBindings(termRef, username, hostname, write, updatePathRef) {
