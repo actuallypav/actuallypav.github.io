@@ -27,7 +27,7 @@ localStorage.setItem('username', username);
 fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
 delete fs['/'].children['home'].children['user'];
 
-var ubuError = new Audio('./audio/bell.oga');
+var ubuError = new Audio('./media/audio/bell.oga');
 
 export const getPrompt = () => 
   `<span class="prompt-user">${username}@${hostname}</span>` +
