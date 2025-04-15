@@ -6,10 +6,10 @@ This portfolio is designed as an interactive Ubuntu terminal, offering a unique 
 
 ## Features
 
-The terminal currently supports basic commands, displaying my projects and experience in a fun, interactive way. Building this site has also enhanced my JavaScript skills, and I now feel confident in my proficiency.
+The terminal currently supports basic commands, displaying my projects and experience in a fun, interactive way. Building this site has also enhanced my JavaScript skills.
 
 ## Future Plans
 
-I plan to expand the terminal's functionality by adding more interactive features, aiming to provide a dynamic user experience.
+I plan to expand the terminal's functionality by adding more interactive features, aiming to provide more of a sandbox-like experience.
 
 Feel free to explore and discover more about my work.
