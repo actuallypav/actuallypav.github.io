@@ -5,6 +5,7 @@ import { getPrompt } from "../main.js";
 
 
 const links = document.querySelectorAll('#quick-bar a');
+let isRunning = false;
 
 const scripts = {
     'Resume': [
@@ -40,13 +41,16 @@ const scripts = {
 };
 
 export function initQuickbarTerminalBindings(termRef, username, hostname, write, updatePathRef) {
+    let isRunning = false;
+
     links.forEach(link => {
         link.addEventListener('contextmenu', async (e) => {
             e.preventDefault();
             const label = link.innerText.trim();
             const script = scripts[label];
 
-            if (!script) return;
+            if (!script || isRunning) return;
+            isRunning = true;
 
             let path = `/home/${username}`;
             let cwd = `~`;
@@ -58,6 +62,8 @@ export function initQuickbarTerminalBindings(termRef, username, hostname, write,
                     cwd = path.replace(`/home/${username}`, `~`);
                 });
             }
+
+            isRunning = false;
         });
     });
 }

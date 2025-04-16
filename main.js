@@ -21,8 +21,6 @@ let path = '/home'; //simulated abs path
 
 localStorage.setItem('username', username);
 
-
-
 //dynamically replace 'user' with the actual username
 fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
 delete fs['/'].children['home'].children['user'];
