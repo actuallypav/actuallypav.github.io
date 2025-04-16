@@ -1,62 +1,60 @@
-## **Proficiency Key**
-- **Beginner:** Basic understanding, limited practical experience.
-- **Intermediate:** Comfortable using the technology with moderate experience and can work independently on common tasks.
-- **Advanced:** Strong understanding, able to design solutions, mentor others, and troubleshoot complex issues.
-- **Expert:** Highly skilled, can design, optimize, and architect systems using the technology with deep knowledge and extensive experience.
-
+<ins>**Proficiency Key**</ins>
+**Beginner:** – Basic understanding, limited practical experience.
+**Intermediate:** – Comfortable using the technology with moderate experience and can work independently on common tasks.
+**Advanced:** – Strong understanding, able to design solutions, mentor others, and troubleshoot complex issues.
+**Expert:** – Highly skilled, can design, optimize, and architect systems using the technology with deep knowledge and extensive experience.
 ---
-
 ## **Technical Skills**
 
-### **Cloud Technologies**
-- **Amazon Web Services (AWS)** – [Your Proficiency Level]
-- **Internet of Things (IoT)** – [Your Proficiency Level]
-- **Identity and Access Management (IAM)** – [Your Proficiency Level]
-- **Compute (EC2)** – [Your Proficiency Level]
-- **Serverless (Lambda)** – [Your Proficiency Level]
+<ins>**Cloud Technologies**</ins>
+**Amazon Web Services (AWS)** – Advanced
+**Internet of Things (IoT)** – Expert
+**Identity and Access Management (IAM)** – Advanced
+**Compute (EC2)** – Advanced
+**Serverless (Lambda)** – Expert
 
-### **Programming Languages**
-- **Python** – [Your Proficiency Level]
-- **Bash** – [Your Proficiency Level]
-- **Java** – [Your Proficiency Level]
-- **MicroPython** – [Your Proficiency Level]
-- **C** – [Your Proficiency Level]
-- **C++** – [Your Proficiency Level]
-- **JavaScript** – [Your Proficiency Level]
+<ins>**Programming Languages**</ins>
+**Python** – Advanced
+**Bash** – Advanced
+**Java** – Intermediate
+**MicroPython (C/C++)** – Intermediate
+**JavaScript** – Intermediate
+**Lisp** – Beginner
+**COBOL** – Beginner
+**Lua** – Beginner
 
-### **Infrastructure as Code**
-- **Terraform** – [Your Proficiency Level]
-- **CloudFormation** – [Your Proficiency Level]
+<ins>**Infrastructure as Code**</ins>
+**Terraform** – Advanced
+**CloudFormation** – Advanced
 
-### **Automation & CI/CD**
-- **Jenkins** – [Your Proficiency Level]
-- **GitHub Actions** – [Your Proficiency Level]
-- **GitLab CI/CD** – [Your Proficiency Level]
-- **Docker** – [Your Proficiency Level]
-- **Kubernetes** – [Your Proficiency Level]
+<ins>**Automation & CI/CD**</ins>
+**Jenkins** – Advanced
+**GitHub Actions** – Intermediate
+**GitLab CI/CD** – Advanced
+**Docker** – Intermediate
+**Kubernetes** – Intermediate
 
-### **Security & Monitoring**
-- **Vault** – [Your Proficiency Level]
-- **Splunk** – [Your Proficiency Level]
-- **Grafana** – [Your Proficiency Level]
-- **Nagios** – [Your Proficiency Level]
-- **Huntsman** – [Your Proficiency Level]
-- **ELK Stack (Elasticsearch, Logstash, Kibana)** – [Your Proficiency Level]
+<ins>**Security & Monitoring**</ins>
+**HashiCorp Vault** – Advanced
+**Splunk** – Intermediate
+**Grafana** – Intermediate
+**Nagios** – Intermediate
+**Huntsman** – Intermediate
+**ELK Stack (Elasticsearch, Logstash, Kibana)** – Intermediate
 
-### **Operating Systems**
-- **Linux**  
-  - Kali Linux – [Your Proficiency Level]  
-  - Ubuntu – [Your Proficiency Level]  
-  - CentOS – [Your Proficiency Level]  
-- **Windows** – [Your Proficiency Level]
-- **MacOS** – [Your Proficiency Level]
-- **VMware ESXi** – [Your Proficiency Level]
+<ins>**Operating Systems**</ins>
+**Linux**  
+  Kali Linux – Intermediate 
+  Ubuntu – Advanced
+  CentOS – Intermediate
+**Windows** – Intermediate
+**MacOS** – Advanced
 
-### **Other Relevant Technologies**
-- **YAML** – [Your Proficiency Level]
-- **JSON** – [Your Proficiency Level]
-- **REST APIs** – [Your Proficiency Level]
-- **Web Scraping (BeautifulSoup)** – [Your Proficiency Level]
-- **Git/GitHub** – [Your Proficiency Level]
-- **SQL** – [Your Proficiency Level]
-- **NoSQL (MongoDB, Redis)** – [Your Proficiency Level]
+<ins>**Other Relevant Technologies**</ins>
+**YAML** – Advanced
+**JSON** – Advanced
+**REST APIs** – Intermediate
+**Web Scraping (BeautifulSoup)** – Intermediate
+**Git/GitHub** – Advanced
+**SQL** – Advanced
+**NoSQL (MongoDB, Redis)** – Intermediate
