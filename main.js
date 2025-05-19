@@ -1,8 +1,8 @@
-import {initializeTerminal} from './UI/layout.js';
-import {commandDescriptions, runCommand} from './commands.js';
-import {fs, getNodeFromPath} from './vfs.js';
-import {terminalState} from './terminalContext.js';
-import {initQuickbarTerminalBindings} from './quicklinks/quickbar.js';
+import { initializeTerminal } from './UI/layout.js';
+import { commandDescriptions, runCommand } from './commands.js';
+import { fs, getNodeFromPath } from './vfs.js';
+import { terminalState } from './terminalContext.js';
+import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
 
 const term = document.getElementById('terminal');
 initializeTerminal(term)
@@ -25,7 +25,7 @@ localStorage.setItem('username', username);
 fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
 delete fs['/'].children['home'].children['user'];
 
-const ubuError = new Audio('./audio/bell.oga');
+var ubuError = new Audio('./audio/bell.oga');
 
 export const getPrompt = () =>
   `<span class="prompt-user">${username}@${hostname}</span>` +
@@ -53,7 +53,7 @@ const render = () => {
   const beforeCursor = buffer.slice(0, cursorPos);
   const atCursor = buffer.charAt(cursorPos) || ' ';
   const afterCursor = buffer.slice(cursorPos + 1);
-  // term.innerHTML = history + getPrompt() + `${beforeCursor}<span class="cursor${isIdle ? ' blink' : ''}">${atCursor}</span>${afterCursor}`;
+  term.innerHTML = history + getPrompt() + `${beforeCursor}<span class="cursor${isIdle ? ' blink' : ''}">${atCursor}</span>${afterCursor}`;
   term.scrollTop = term.scrollHeight;
 };
 
@@ -67,13 +67,17 @@ document.addEventListener('keydown', (e) => {
     } else {
       ubuError.play();
     }
-  } else if (e.key === 'Delete') {
+  }
+
+  else if (e.key === 'Delete') {
     if (cursorPos < buffer.length) {
       buffer = buffer.slice(0, cursorPos) + buffer.slice(cursorPos + 1);
     } else {
       ubuError.play();
     }
-  } else if (e.key === 'Enter') {
+  }
+
+  else if (e.key === 'Enter') {
     const trimmed = buffer.trim().toLowerCase();
     write(getPrompt() + trimmed);
 
@@ -95,7 +99,9 @@ document.addEventListener('keydown', (e) => {
     buffer = '';
     historyIndex = commandHistory.length;
     cursorPos = 0;
-  } else if (e.key === 'ArrowUp') {
+  }
+
+  else if (e.key === 'ArrowUp') {
     if (historyIndex > 0) {
       historyIndex--;
       buffer = commandHistory[historyIndex];
@@ -104,7 +110,9 @@ document.addEventListener('keydown', (e) => {
       ubuError.play();
     }
     term.scrollTop = scrollTop;
-  } else if (e.key === 'ArrowDown') {
+  }
+
+  else if (e.key === 'ArrowDown') {
     if (historyIndex < commandHistory.length - 1) {
       historyIndex++;
       buffer = commandHistory[historyIndex];
@@ -116,22 +124,31 @@ document.addEventListener('keydown', (e) => {
     } else {
       ubuError.play();
     }
-  } else if (e.key === 'ArrowRight') {
+  }
+
+  else if (e.key === 'ArrowRight') {
     if (cursorPos < buffer.length) {
       cursorPos++;
     } else {
       ubuError.play();
     }
-  } else if (e.key === 'ArrowLeft') {
+  }
+
+  else if (e.key === 'ArrowLeft') {
     if (cursorPos > 0) {
       cursorPos--;
     } else {
       ubuError.play();
     }
-  } else if (e.key.length === 1) {
+  }
+
+  else if (e.key.length === 1) {
+    const lowerKey = e.key.toLowerCase();
     buffer = buffer.slice(0, cursorPos) + e.key + buffer.slice(cursorPos);
     cursorPos++;
-  } else if (e.key === 'Tab') {
+  }
+
+  else if (e.key === 'Tab') {
     e.preventDefault();
 
     const parts = buffer.trim().split(' ');
@@ -179,6 +196,7 @@ document.addEventListener('keydown', (e) => {
             }
 
 
+
           }
 
         } else if (matches.length > 1) {
@@ -220,7 +238,7 @@ document.addEventListener('keydown', (e) => {
       }
     } else if (cmd === 'help') {
       const allCommands = Object.keys(commandDescriptions);
-      const matches = allCommands.filter(name => name.startsWith(inputPath));
+      const matches =allCommands.filter(name => name.startsWith(inputPath));
 
       if (matches.length === 1) {
         buffer = `help ${matches[0]}`;
