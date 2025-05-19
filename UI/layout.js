@@ -27,7 +27,6 @@ export function initializeTerminal(terminal) {
     window.addEventListener('resize', adjustTerminalLayout);
   
     function enableMobileTyping() {
-      terminal.setAttribute('contenteditable', 'true');
       terminal.addEventListener('input', (event) => {
         const text = event.target.innerText;
         console.log('User is typing:', text);
