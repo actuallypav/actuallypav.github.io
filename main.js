@@ -7,7 +7,7 @@ import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
 const term = document.getElementById('terminal');
 initializeTerminal(term)
 
-let username = localStorage.getItem('username') || prompt('Enter your username: ') || 'user';
+let username = localStorage.getItem('username') || (prompt('Enter your username: ')?.trim() || 'user');
 let hostname = 'ubuntu-web-terminal';
 let cwd = `/home`;
 let buffer = '';
