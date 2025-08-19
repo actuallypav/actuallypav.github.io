@@ -1,13 +1,57 @@
-# ActuallyPav's Terminal Portfolio
+# ActuallyPav’s Terminal Portfolio
 
 ## Overview
+This project is an interactive **Ubuntu-style terminal emulator** built for the web, serving as a unique portfolio experience. Instead of a standard webpage, visitors can explore your work and information by typing commands into a simulated shell environment.
 
-[This portfolio](https://pawelambrozy.com/) is designed as an interactive Ubuntu terminal, offering a unique alternative to traditional portfolio formats. While I don't possess the skills to create complex 3D environments like <a href="https://bruno-simon.com/">Bruno Simon</a>, I've developed a terminal emulator that showcases my work in an engaging manner.
+Live Demo: [pawelambrozy.com](https://pawelambrozy.com/)
 
 ## Features
+- Realistic terminal UI with prompt, commands, and filesystem navigation.
+- Basic Linux-like commands (`ls`, `cd`, `cat`, `clear`, etc.).
+- Custom portfolio commands (projects, about, resume, quick links).
+- Persistent state stored in `localStorage` (username, environment).
+- Responsive design for desktop and mobile.
+- Extensible architecture – new commands can be added easily.
 
-The terminal currently supports basic commands, displaying my projects and experience in a fun, interactive way. Building this site has also enhanced my JavaScript skills.
+## Getting Started
 
-## Future Plans
+### Prerequisites
+- Any modern browser (Chrome, Firefox, Safari, Edge, Zen).
 
-I plan to expand the terminal's functionality by adding more interactive features, aiming to provide more of a sandbox-like experience.
+### Usage
+
+When you load the page:
+You’ll be prompted for a username (defaults to "user" if left empty).
+Type commands as you would in a normal terminal.
+
+Example:
+```bash
+ls
+cd projects
+cat about.md
+```
+
+### Available Commands
+```bash
+ls – List files in directory
+cd <dir> – Change directory
+cat <file> – Display file contents
+help – Show available commands
+about, info – Portfolio details
+clear – Clear the terminal
+```
+
+### Project Struccture
+```bash
+.
+├── index.html         # Entry point
+├── main.js            # Terminal initialization & state
+├── commands/          # Individual command implementations
+├── vfs.js             # Virtual filesystem definition
+├── terminalContext.js # Terminal state management
+├── style.css          # Styling
+└── quicklinks/        # External links and shortcuts
+```
+
+License
+MIT License. Free to use and modify.
