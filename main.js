@@ -7,7 +7,6 @@ import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
 const term = document.getElementById('terminal');
 initializeTerminal(term)
 
-let username = localStorage.getItem('username') || (prompt('Enter your username (will default to "user" if left empty): ')?.trim() || 'user');
 let hostname = 'ubuntu-web-terminal';
 let cwd = `/home`;
 let buffer = '';
@@ -19,11 +18,16 @@ let idleTimer;
 let isIdle = true;
 let path = '/home'; //simulated abs path
 
+const stored = localStorage.getItem('username');
+const input = stored ? null : prompt('Enter your username (leave blank to use "user"): ');
+const username = (stored || (input ?? '')).trim() || 'user';
 localStorage.setItem('username', username);
 
-//dynamically replace 'user' with the actual username
-fs['/'].children['home'].children[username] = fs['/'].children['home'].children['user'];
-delete fs['/'].children['home'].children['user'];
+// create per-user home dir (don't delete if username is "user")
+if (username !== 'user' && fs['/'].children['home'].children['user']) {
+  fs['/'].children['home'].children[username] =fs['/'].children['home'].children['user'];
+  delete fs['/'].children['home'].children['user'];
+}
 
 var ubuError = new Audio('./audio/bell.oga');
 
