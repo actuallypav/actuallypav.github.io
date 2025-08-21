@@ -261,6 +261,31 @@ document.addEventListener('keydown', (e) => {
   resetIdle();
 });
 
+//simulate typing a command & pressing Enter so it goes through normal flow (history, prompt, etc.)
+function simulateRunCommand(cmd) {
+  buffer = cmd;
+  cursorPos = buffer.length;
+  const ev = new KeyboardEvent('keydown', { key: 'Enter' });
+  document.dispatchEvent(ev)
+}
+
+//clickable ls output: dirs = cd+ls, files = cat
+term.addEventListener('click', (e) => {
+  const link = e.target.closest('a.fs-link');
+  if (!link) return;
+  e.preventDefault();
+
+  const p = link.dataset.fsPath;
+  const t = link.dataset.fsType;
+
+  if (t === 'dir') {
+    simulateRunCommand(`cd ${p}`);
+    setTimeout(() => simulateRunCommand('ls'), 150);
+  } else {
+    simulateRunCommand(`cat ${p}`);
+  }
+});
+
 //export bits
 terminalState.username = username;
 
