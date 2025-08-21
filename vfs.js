@@ -42,6 +42,15 @@ Because he used up all his cache printing "Hello, World!" in 15 different langua
                   },
                 }
               },
+              'blog':{
+                type:'dir',
+                children:{
+                  'DDMMYYYY-de-beninging':{
+                    type:'file',
+                    content:'# To be filled'
+                  }
+                }
+              },
               'portfolio': {
                 type: 'dir',
                 children: {
