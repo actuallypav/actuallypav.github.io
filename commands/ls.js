@@ -1,17 +1,23 @@
 import { getNodeFromPath } from "../vfs.js";
 
-export const description = `ls [path]\n
-    List files and directories in the current directory.\n
-    Lists the files and directories in the specified directory. 
-    If no directory is specified, the current directory is used. 
-    If the specified directory does not exist, an error message is displayed.\n
-    If the directory contains subdirectories, they will be displayed with a special class name for styling purposes.\n
-    Arguments:
-      path   Directory to list files and directories from. If not specified, defaults to the current directory.\n\n
+export const description = `ls: ls [path]
+    List files and directories.
+
+    path
+        Directory to list. If not specified, defaults to the current directory.
+
+    Behavior:
+        If the directory contains subdirectories, they are displayed
+        with a special class name for styling.
+        If the directory is empty, prints: "Directory is empty."
+
+    Errors:
+        If the specified directory does not exist, prints:
+        "No such directory: [path]".
+
     Exit Status:
-    Returns a list of files and directories if the specified directory is valid. 
-    If the directory is empty, it will display \`Directory is empty.\`. 
-    If the directory is invalid, it returns an error message \`No such directory: [path]\`.`;
+        0  if files and directories are listed.
+        >0 if the directory is invalid.`;
 
 
 export default function ls(write, args, { path }) {

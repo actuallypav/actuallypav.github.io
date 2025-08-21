@@ -1,10 +1,14 @@
-export const description = `about\n
-    Display information about the terminal.\n
-    Shows information about this fake Ubuntu terminal built in JavaScript.\n
+export const description = `about: about
+    Display information about the terminal.
+
+    Behavior:
+        Shows details about this fake Ubuntu terminal built in JavaScript.
+
     Arguments:
-      None\n
+        None
+
     Exit Status:
-    Returns success (0) after displaying the information.`;
+        0  after displaying the information.`;
 
 
 export default function about(write) {

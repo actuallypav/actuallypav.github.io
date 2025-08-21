@@ -1,10 +1,11 @@
-export const description = `clear: clear\n
-    Clear the terminal screen.\n
-    Clears the current terminal screen, removing all output and history from the display.\n
+export const description = `clear: clear
+    Clear the terminal screen.
+
     Arguments:
-      None\n
+        None
+
     Exit Status:
-    Returns success (0) after clearing the screen.`;
+        0  after clearing the screen.`;
 
 export default function clear(write, clear) {
     write('', clear); // clears history

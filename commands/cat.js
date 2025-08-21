@@ -12,24 +12,28 @@ marked.setOptions({
     }
 });
 
-export const description = `cat [file]
-    Display the contents of a file, GitHub repository overview, or CV markdown file.
+export const description = `cat: cat [file|pattern]
+    Display the contents of files, GitHub repository overviews, or CV markdown files.
 
-    Supports:
-      - Regular files: outputs raw content.
-      - Portfolio: fetches and renders the "Overview" section of README.md from GitHub.
-      - Resume: loads and renders associated markdown (.md) file from /resume.
-      - Wildcards (*): matches and displays multiple entries.
+    file
+        Output the raw contents of the specified file.
 
-    If the target is a directory, an error message is shown: \`Is a directory\`.
-    If the specified file or path is not found, an error message is shown: \`No such file or directory\`.
+    pattern
+        Use wildcards (*) to match and display multiple files or repositories.
 
-    Arguments:
-      file     Path to a file.
-      *  Wildcard pattern to match multiple files or repos.
+    Special cases:
+        GitHub repository
+            Fetch and render the "Overview" section of README.md.
+        Resume
+            Load and render the associated markdown (.md) file from /resume.
+
+    Errors:
+        If the target is a directory, prints: "Is a directory".
+        If the file or path is not found, prints: "No such file or directory".
 
     Exit Status:
-    Returns success (0) if content is displayed. Returns a non-zero status and error message if the file is not found or is invalid.`;
+        0  if content is displayed.
+        >0 if the file is invalid, not found, or is a directory.`;
 
 export default async function cat(write, args, env) {
     if (args.length === 0) {

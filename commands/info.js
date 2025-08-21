@@ -1,5 +1,16 @@
-export const description = `In the future this will contain detailed documentation for commands and utilities within pav-buntu-terminal.
-For now use it the command 'info pav'`;
+export const description = `info: info pav
+    Display documentation for pav-buntu-terminal.
+
+    Behavior:
+        Currently shows general information about the terminal.
+        In the future, this will contain detailed documentation
+        for commands and utilities within pav-buntu-terminal.
+
+    Arguments:
+        pav   Display information about the terminal.
+
+    Exit Status:
+        0  after displaying the information.`;
 
 export default function info(write, args, env) {
     const argument = args[0]?.trim();

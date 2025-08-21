@@ -1,15 +1,24 @@
 import { getNodeFromPath } from "../vfs.js"
 
-export const description = `cd [path]
-    Change the current directory.
-    Changes the current working directory to the specified PATH. 
-    If no PATH is specified, the default directory is set to \`/home\`. If PATH is \`..\`, it moves up one level in the directory structure.\n
-    For relative paths, the current path is combined with the specified path to form the new directory.
-    If the specified directory does not exist or is not a directory, an error message is shown: \`No such file or directory\`.\n
-    Arguments:
-      path   Directory to change to. If not specified, defaults to \`/home\`.\n
+export const description = `cd: cd [path]
+    Change the current working directory.
+
+    path
+        Directory to change to. If not specified, defaults to /home.
+
+    Special cases:
+        ..
+            Move up one level in the directory structure.
+        relative path
+            Combined with the current directory to form the new path.
+
+    Errors:
+        If the specified path does not exist or is not a directory,
+        prints: "No such file or directory".
+
     Exit Status:
-    Returns success (0) if the directory is successfully changed. If the specified path is invalid or not a directory, returns an error message and non-zero status.`;
+        0  if the directory is successfully changed.
+        >0 if the path is invalid or not a directory.`;
 
 
 export default function cd(write, args, { cwd, path, fs, getNodeFromPath, updatePath}) {
