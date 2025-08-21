@@ -1,0 +1,35 @@
+name: Blog from Issue
+on:
+    issues:
+        types: [opened, edited, labeled]
+
+permissions:
+    contents: write
+    issues: read
+
+jobs:
+    make-post:
+        if: contains(github.eve.issue.labels.*.name, 'blod-post')
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                node-version: 20
+
+            - name: Make post
+              env:
+                ISSUE_JSON: ${{ toJson(github.event.issue) }}
+              run: node .github/scripts/make-post.js
+
+            - name: Archive rollover
+              run: node .github/scripts/archive-posts.js
+
+            - name: Commit changes
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                commit_message: "Blog: issue #${{ github.event.issue.number }} (new post and|or archive)"
+                file_pattern: |
+                  blog/*.md
+                  old_posts/**/*.md
