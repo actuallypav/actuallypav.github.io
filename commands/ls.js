@@ -49,10 +49,15 @@ export default function ls(write, args, { path }) {
     if (currentDirNode && currentDirNode.type === 'dir') {
         const children = Object.keys(currentDirNode.children);
         if (children.length > 0) {
-            const formattedChildren = children.map(child => {
-                const childNode = currentDirNode.children[child];
-                return childNode.type === 'dir' ? `<span class="directory">${child}</span>` 
-                : child;
+            const basePath = pathToCheck === '/' ? '' : pathToCheck;
+            const formatted = children.map(name => {
+                const node = currentDirNode.children[name];
+                const full = `${basePath}${basePath.endsWith('/') ? '' : '/'}${name}`;
+                if (node.type === 'dir') {
+                    return `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${full}">${name}/</a>`;
+                } else {
+                    return `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${full}">${name}</a>`;
+                }
             });
             write(formattedChildren.join('  '));
         } else {
