@@ -26,10 +26,13 @@ jobs:
             - name: Archive rollover
               run: node .github/scripts/archive-posts.js
 
+            - name: Build indexes
+              run: node .github/scripts/build-index.js
+
             - name: Commit changes
-              uses: stefanzweifel/git-auto-commit-action@v5
-              with:
-                commit_message: "Blog: issue #${{ github.event.issue.number }} (new post and|or archive)"
-                file_pattern: |
-                  blog/*.md
-                  old_posts/**/*.md
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git add blog/*.md blog/index.json old_posts/**/*.md old_posts/**/index.json
+                git commit -m "Blog: #${{ github.event.issue.number }} (post, archive, index)" || echo "Nothing to commit"
+                git push
