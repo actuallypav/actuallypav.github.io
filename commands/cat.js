@@ -1,3 +1,6 @@
+import { fetchPost } from "../content/blogLoader";
+import { marked } from 'marked';
+
 marked.setOptions({
     renderer: new marked.Renderer(),
     gfm: true,
@@ -40,6 +43,20 @@ export default async function cat(write, args, env) {
         return;
     }
 
+    //handle blog/old_posts
+    const target = args[0] || '';
+    if (/^(blog|old_posts)\//.test(target)) {
+        try {
+            const md = await fetchPost(target);
+            const html = marked.parse(md);
+            write(html);
+            return;
+        } catch (e) {
+            return write(`cat: ${target}: ${e.message}`);
+        }
+    }
+
+    //generate default file path
     const pathParts = args[0].startsWith('/')
         ? args[0].split('/')
         : (env.path + '/' + args[0]).split('/');
