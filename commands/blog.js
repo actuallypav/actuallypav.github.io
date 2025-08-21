@@ -1,15 +1,27 @@
-export const description = `blog: blog [list|latest|DDMMYYYY|--help|--version]
+export const description = `blog: blog [list|l|latest|DDMMYYYY|--help|--version]
     Manage and view blog posts from the terminal.
 
-    list
-        List the 10 most recent blog posts.
+    list, l
+        List the 10 most recent blog posts with dates and titles.
 
     latest
-        Open the most recent blog post.
+        Open and display the most recent blog post.
 
     DDMMYYYY
-        Open the blog post published on the specified date.
-        Example: blog 24091999 opens the post from 24 September 1999.`;
+        Open and display the blog post published on the specified date.
+        Example: blog 24091999 opens the post from 24 September 1999.
+
+    Errors:
+        If the /blog directory does not exist, prints: "blog: /blog directory not found".
+        If no posts are available, prints: "blog: no posts found".
+        If no argument is given, prints: "blog: missing argument. Usage: blog <DDMMYYYY|latest|list>".
+        If the date is invalid, prints: "blog: invalid date. Use DDMMYYYY, \\"latest\\", or \\"list\\"".
+        If no post exists for the given date, prints: "blog: no post for <date>. Try \\"blog list\\"".
+
+    Exit Status:
+        0  if a post or list of posts is displayed.
+        >0 if the directory is missing, no posts exist, the argument is invalid, or no post matches the date.`;
+
 
 export default function blog(write, args, { fs, getNodeFromPath }) {
     const blogDir = getNodeFromPath('/blog');
