@@ -21,43 +21,67 @@ export const description = `ls: ls [path]
         >0 if the directory is invalid.`;
 
 export default async function ls(write, args, { path }) {
-
-    console.log('[ls] called with path=', path, 'args[0]=', args[0]);
-
     let pathToCheck = args[0]
     ? (args[0].startsWith('/') ? args[0] : (path.endsWith('/') ? path+args[0] : path+'/'+args[0]))
     : path;
 
     let dynamicPath = null;
-    if (/^\/home\/[^/]+\/blog\/?$/.test(pathToCheck)) dynamicPath = '/blog';
-    const mHome = pathToCheck.match(/^\/home\/[^/]+\/old_posts\/(\d{4})\/(\d{2})\/?$/);
-    if (mHome) dynamicPath = `/old_posts/${mHome[1]}/${mHome[2]}`;
+    const isHomeBlog = /^\/home\/[^/]+\/blog\/?$/.test(pathToCheck);
+    if (isHomeBlog) dynamicPath = '/blog';
+
+    const mNestedYM  = pathToCheck.match(/^\/home\/[^/]+\/blog\/old_posts\/(\d{4})\/(\d{2})\/?$/);
+    const mNestedY   = pathToCheck.match(/^\/home\/[^/]+\/blog\/old_posts\/(\d{4})\/?$/);
+    const isOldRoot  = /^\/home\/[^/]+\/blog\/old_posts\/?$/.test(pathToCheck);
+
+    if (mNestedYM) dynamicPath = `/old_posts/${mNestedYM[1]}/${mNestedYM[2]}`;
+    else if (mNestedY) dynamicPath = `/old_posts/${mNestedY[1]}`;
+    else if (isOldRoot) dynamicPath = '/old_posts';
+
     if (pathToCheck === '/blog') dynamicPath = '/blog';
-    const mAbs = pathToCheck.match(/^\/old_posts\/(\d{4})\/(\d{2})\/?$/);
-    if (mAbs) dynamicPath = `/old_posts/${mAbs[1]}/${mAbs[2]}`;
+    const mAbsYM = pathToCheck.match(/^\/old_posts\/(\d{4})\/(\d{2})\/?$/);
+    const mAbsY  = pathToCheck.match(/^\/old_posts\/(\d{4})\/?$/);
+    if (mAbsYM) dynamicPath = `/old_posts/${mAbsYM[1]}/${mAbsYM[2]}`;
+    else if (mAbsY) dynamicPath = `/old_posts/${mAbsY[1]}`;
+    else if (pathToCheck === '/old_posts') dynamicPath = '/old_posts';
 
-    //dynamic listing for blog/archive
     if (dynamicPath) {
-        console.log('[ls] dynamicPath=', dynamicPath);
         try {
-            const items = await listBlog(dynamicPath); // [{path,date,title}]
-            const posts = (items || []).map(p =>
-                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">
-                    ${p.date}-${p.title.replace(/</g,'&lt;')}
-                </a>`
-        );
+            const items = await listBlog(dynamicPath);
 
-        // show the nested archive directory when listing /home/<user>/blog
-        const isHomeBlog = /^\/home\/[^/]+\/blog\/?$/.test(pathToCheck);
-        if (isHomeBlog) {
-            const oldPath = pathToCheck.replace(/\/$/, '') + '/old_posts';
-            posts.unshift(
-                `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${oldPath}">old_posts/</a>`
-            );
-        }
+            // Posts (blog or year/month in old_posts)
+            if (dynamicPath === '/blog' || /^\/old_posts\/\d{4}\/\d{2}$/.test(dynamicPath)) {
+                const posts = (items || []).map(p =>
+                    `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">${p.date}-${p.title.replace(/</g,'&lt;')}</a>`
+                );
+                if (isHomeBlog) {
+                    const oldPath = pathToCheck.replace(/\/$/, '') + '/old_posts';
+                    posts.unshift(`<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${oldPath}">old_posts/</a>`);
+                }
+                if (!posts.length) return write('Directory is empty.');
+                    return write(posts.join('  '));
+            }
 
-        if (!posts.length) return write('Directory is empty.');
-        return write(posts.join('  '));
+            // Years list
+            if (dynamicPath === '/old_posts') {
+                if (!items?.length) return write('Directory is empty.');
+                const out = items.map(y =>
+                    `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${pathToCheck.replace(/\/$/,'')}/${y}">${y}/</a>`
+                );
+                return write(out.join('  '));
+            }
+
+            // Months in a year
+            const mYear = dynamicPath.match(/^\/old_posts\/(\d{4})$/);
+            if (mYear) {
+                if (!items?.length) return write('Directory is empty.');
+                const base = pathToCheck.replace(/\/$/,'');
+                const out = items.map(mm =>
+                    `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${base}/${mm}">${mm}/</a>`
+                );
+                return write(out.join('  '));
+            }
+
+            return write('Directory is empty.');
         } catch (e) {
             console.error('ls dynamic error', e);
             return write(`ls: failed to load index for ${dynamicPath}`);
