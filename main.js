@@ -315,23 +315,44 @@ write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alte
 render();
 
 terminalState.render = render;
+if (!window.__fsLinksBound) {
+    window.__fsLinksBound = true;
 
-// // make ls output clickable
-// function runCmd(c) {
-//   buffer = c;
-//   cursorPos = c.length;
-//   document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter'}));
-// }
+    function executeDirect(cmd) {
+      write(getPrompt() + cmd);
 
-// term.addEventListener('click', e => {
-//   const a = e.target.closest('a.fs-link');
-//   if (!a) return;
-//   e.preventDefault();
-//   const p = a.dataset.fsPath, t = a.dataset.fsType;
-//   if (t === 'dir') {
-//     runCmd(`cd ${p}`);
-//     setTimeout(() => runCmd('ls'), 150);
-//   } else {
-//     runCmd(`cat ${p}`);
-//   }
-// });
+      if (cmd.trim() !== "") {
+        commandHistory.push(cmd);
+      }
+
+      runCommand(cmd, username, hostname, write, {
+        cwd,
+        path,
+        fs,
+        getNodeFromPath,
+        updatePath: (newPath) => {
+          path = newPath;
+          cwd = path.replace(`/home/${username}`, `~`);
+        }
+      });
+
+      buffer = '';
+      historyIndex = commandHistory.length;
+      cursorPos = 0;
+      render();
+    }
+
+    term.addEventListener('click', e => {
+      const a = e.target.closest('a.fs-link');
+      if (!a) return;
+      e.preventDefault();
+
+      const p = a.dataset.fsPath, t = a.dataset.fsType;
+      if (t === 'dir') {
+        executeDirect(`cd ${p}`);
+        setTimeout(() => executeDirect('ls'), 150);
+      } else {
+        executeDirect(`cat ${p}`);
+      }
+    });
+}
