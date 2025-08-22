@@ -1,50 +1,81 @@
-async function getJSON(url) {
-    const r = await fetch(url, { cache: 'no-store' });
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-    return r.json()
-}
-async function getText(url) {
-    const r = await fetch(url, {cache: 'no-store' });
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-    return r.text();
+async function fetchJSON(url) {
+    const response = await fetch(url, { cache: 'force-cache' });
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status} while fetching ${url}`);
+    }
+    return response.json();
 }
 
-//list entries for a path (/blog or /old_posts)
+async function fetchText(url) {
+    const response = await fetch(url, { cache: 'force-cache' });
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status} while fetching ${url}`);
+    }
+    return response.text();
+}
+
+//simple in-memory cache so we don’t refetch the same file
+const jsonCache = new Map();
+
+async function getCachedJSON(url) {
+    if (jsonCache.has(url)) {
+        return jsonCache.get(url);
+    }
+    const data = await fetchJSON(url);
+    jsonCache.set(url, data);
+    return data;
+}
+
+//public api: list directories or fetch a post
 export async function list(dirPath) {
-    if (dirPath === '/blog'){
-        return await getJSON('/blog/index.json');
+    // /blog -> recent posts
+    if (dirPath === '/blog') {
+        return await getCachedJSON('/blog/index.json');
     }
 
-    if (dirPath.startsWith('/old_posts')) {
-        const all = await getJSON('/old_posts/index.json');
+  //anything outside old_posts we ignore
+    if (!dirPath.startsWith('/old_posts')) {
+        return null;
+    }
 
-        const m = dirPath.match(/^\/old_posts(?:\/(\d{4})(?:\/(\d{2}))?)?$/);
-        if(!m) return null;
-        const [, y, mm] = m;
-        if (!y) {
-            return Array.from(
-                new Set(all.map(p => p.path.split('/')[2]))
-            ).sort();
+    // /old_posts → years (["2025","2024",...])
+    if (dirPath === '/old_posts') {
+        return await getCachedJSON('/old_posts/index.json');
+    }
+
+    // /old_posts/YYYY → months (["01","02",...])
+    const yearMatch = dirPath.match(/^\/old_posts\/(\d{4})$/);
+    if (yearMatch) {
+        const year = yearMatch[1];
+        const yearPosts = await getCachedJSON(`/old_posts/${year}/index.json`);
+        const months = Array.from(
+            new Set(yearPosts.map(p => p.path.split('/')[3]))
+        ).sort();
+        return months;
+    }
+
+    // /old_posts/YYYY/MM → posts (from month index if present, else from year)
+    const monthMatch = dirPath.match(/^\/old_posts\/(\d{4})\/(\d{2})$/);
+    if (monthMatch) {
+        const [_, year, month] = monthMatch;
+
+        //prefer smaller month index
+        const monthUrl = `/old_posts/${year}/${month}/index.json`;
+        try {
+            return await getCachedJSON(monthUrl);
+        } catch {
+            //fallback: filter from the year index
+            const yearPosts = await getCachedJSON(`/old_posts/${year}/index.json`);
+            return yearPosts.filter(p =>
+                p.path.includes(`/old_posts/${year}/${month}/`)
+            );
         }
-
-        if (!mm) {
-            return Array.from(
-                new Set(
-                    all
-                        .filter(p => p.path.includes(`/old_posts/${y}/`))
-                        .map(p => p.path.split('/')[3])
-                )
-            ).sort();
-        }
-
-        return all.filter(p => p.path.includes(`/old_posts/${y}/${mm}/`));
     }
 
     return null;
 }
 
-//fetch a markdown file by repo-relativve path(blog/DDMMYYYY or old_post/YYYY/MM)
 export async function fetchPost(sitePath) {
-    const p = sitePath.startsWith('/') ? sitePath : `/${sitePath}`;
-    return await getText(p);
+    const normalized = sitePath.startsWith('/') ? sitePath : `/${sitePath}`;
+    return await fetchText(normalized);
 }
