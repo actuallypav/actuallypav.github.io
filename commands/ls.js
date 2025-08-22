@@ -20,7 +20,7 @@ export const description = `ls: ls [path]
         0  if files and directories are listed.
         >0 if the directory is invalid.`;
 
-export default function ls(write, args, { path }) {
+export default async function ls(write, args, { path }) {
     let pathToCheck = path;
 
     if (args.length > 0) {
@@ -30,12 +30,9 @@ export default function ls(write, args, { path }) {
     }
 
     //check for dynamic blog/archive dirs first
-    const dynamic = await (async () => {
-        if (pathToCheck === '/blog') return await listBlog('/blog');
-        const m = pathToCheck.match(/^\/old_posts\/\d{4}\/\d{2}$/);
-        if (m) return await listBlog(pathToCheck);
-        return null;
-    })();
+    let dynamic = null;
+    if (pathToCheck === '/blog') dynamic = await listBlog('/blog');
+    else if (/^\/old_posts\/\d{4}\/\d{2}$/.test(pathToCheck)) dynamic = await listBlog(pathToCheck);
 
     if (dynamic) {
         const formatted = dynamic.map(p =>
@@ -45,7 +42,6 @@ export default function ls(write, args, { path }) {
     }
 
     const currentDirNode = getNodeFromPath(pathToCheck);
-
     if (currentDirNode && currentDirNode.type === 'dir') {
         const children = Object.keys(currentDirNode.children);
         if (children.length > 0) {
@@ -59,7 +55,7 @@ export default function ls(write, args, { path }) {
                     return `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${full}">${name}</a>`;
                 }
             });
-            write(formattedChildren.join('  '));
+            write(formatted.join('  '));
         } else {
             write('Directory is empty.');
         }
