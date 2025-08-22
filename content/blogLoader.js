@@ -1,6 +1,6 @@
 const REPO_OWNER = 'actuallypav'
 const REPO_NAME = 'actuallypav.github.io'
-const BRANCH = 'main';
+const BRANCH = 'blog';
 
 const RAW = (p) => `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${p}`;
 
