@@ -55,7 +55,7 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
     //right-click: cd /blog && ls
     blogLink.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        const steps = (scripts['Blog'] || []).map(c => c.replace('$${username}', username));
+        const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
         (async () => {
             for (const cmd of steps) {
                 runCommand(cmd, username, hostname, write, {
@@ -96,9 +96,9 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
         blogLink.after(menu);
 
         menu.addEventListener('click', (ev) => {
-            const btn = ev.target.closest('button[data-cmd]');
-            if (!btn) return;
-            const chain = btn = btn.dataset.cmd.split('&&').map(s => s.trim());
+            const a = ev.target.closest('a[data.cmd');
+            if (!a) return;
+            const chain = a.dataset.cmd.split('&&').map(s => s.trim());
             (async () => {
                 for (const c of chain) {
                     runCommand(c, username, hostname, write, {
@@ -121,8 +121,8 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
         });
         
         const rect = blogLink.getBoundingClientRect();
-        menu.style.left = rect.left = rect.left = 'px';
-        menu.style.top = (rect.bottom + 4) + 'px';
+        menu.style.left = (linkRect.left - barRect.left) + 'px';
+        menu.style.top  = (linkRect.bottom - barRect.top + 4) + 'px';
 
         const close = (ev) => {
             if (!menu.contains(ev.target) && ev.target !== blogLink) {
