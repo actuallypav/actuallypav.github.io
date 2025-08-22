@@ -82,9 +82,9 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
         menu = document.createElement('div');
         menu.className = 'quick-menu';
         menu.innerHTML = `
-            <button data-cmd="blog latest">Blog latest</button>
-            <button data-cmd="cd /blog && ls">Blog recent</button>
-            <button data-cmd="cd /old_posts && ls">Blog archive</button>
+            <a href="#" data-cmd="blog latest">Blog latest</a><br>
+            <a href="#" data-cmd="cd /blog && ls">Blog recent</a><br>
+            <a href="#" data-cmd="cd /old_posts && ls">Blog archive</a>
         `;
         Object.assign(menu.style, {
             position: 'absolute', zIndex: 10, background: '#111',
