@@ -1,8 +1,6 @@
 import { getNodeFromPath } from "../vfs.js";
 import { list as listBlog } from "../content/blogLoader.js";
 
-console.log('[ls] called with path=', path, 'args[0]=', args[0]);
-
 export const description = `ls: ls [path]
     List files and directories.
 
@@ -23,6 +21,9 @@ export const description = `ls: ls [path]
         >0 if the directory is invalid.`;
 
 export default async function ls(write, args, { path }) {
+
+    console.log('[ls] called with path=', path, 'args[0]=', args[0]);
+
     let pathToCheck = args[0]
     ? (args[0].startsWith('/') ? args[0] : (path.endsWith('/') ? path+args[0] : path+'/'+args[0]))
     : path;
