@@ -48,6 +48,15 @@ Because he used up all his cache printing "Hello, World!" in 15 different langua
                   'DDMMYYYY-de-beninging':{
                     type:'file',
                     content:'# To be filled'
+                  },
+                  old_posts: {
+                    type: 'dir',
+                    children: {
+                      'DDMMYYYY-de-old': {
+                        type:'file',
+                        content:'# To be old'
+                      }
+                    }
                   }
                 }
               },
