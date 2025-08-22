@@ -1,5 +1,5 @@
 import { getNodeFromPath } from "../vfs.js";
-import { list as listBlog } from '../content/blogLoader.js';
+import { list as listBlog } from "../content/blogLoader.js";
 
 export const description = `ls: ls [path]
     List files and directories.
