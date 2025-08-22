@@ -1,6 +1,8 @@
 import { getNodeFromPath } from "../vfs.js";
 import { list as listBlog } from "../content/blogLoader.js";
 
+console.log('[ls] called with path=', path, 'args[0]=', args[0]);
+
 export const description = `ls: ls [path]
     List files and directories.
 
@@ -35,6 +37,7 @@ export default async function ls(write, args, { path }) {
 
     //dynamic listing for blog/archive
     if (dynamicPath) {
+        console.log('[ls] dynamicPath=', dynamicPath);
         try {
             const items = await listBlog(dynamicPath); // expects [{path,date,title}]
             if (!items || items.length === 0) return write('Directory is empty.');
