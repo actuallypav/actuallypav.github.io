@@ -21,45 +21,54 @@ export const description = `ls: ls [path]
         >0 if the directory is invalid.`;
 
 export default async function ls(write, args, { path }) {
-    let pathToCheck = path;
+    let pathToCheck = args[0]
+    ? (args[0].startsWith('/') ? args[0] : (path.endsWith('/') ? path+args[0] : path+'/'+args[0]))
+    : path;
 
-    if (args.length > 0) {
-        pathToCheck = args[0].startsWith('/')
-            ? args[0]
-            : (path.endsWith('/') ? path + args[0] : path + '/' + args[0]);
-    }
+    let dynamicPath = null;
+    if (/^\/home\/[^/]+\/blog\/?$/.test(pathToCheck)) dynamicPath = '/blog';
+    const mHome = pathToCheck.match(/^\/home\/[^/]+\/old_posts\/(\d{4})\/(\d{2})\/?$/);
+    if (mHome) dynamicPath = `/old_posts/${mHome[1]}/${mHome[2]}`;
+    if (pathToCheck === '/blog') dynamicPath = '/blog';
+    const mAbs = pathToCheck.match(/^\/old_posts\/(\d{4})\/(\d{2})\/?$/);
+    if (mAbs) dynamicPath = `/old_posts/${mAbs[1]}/${mAbs[2]}`;
 
-    //check for dynamic blog/archive dirs first
-    let dynamic = null;
-    if (pathToCheck === '/blog') dynamic = await listBlog('/blog');
-    else if (/^\/old_posts\/\d{4}\/\d{2}$/.test(pathToCheck)) dynamic = await listBlog(pathToCheck);
+    //dynamic listing for blog/archive
+    if (dynamicPath) {
+        try {
+            const items = await listBlog(dynamicPath); // expects [{path,date,title}]
+            if (!items || items.length === 0) return write('Directory is empty.');
 
-    if (dynamic) {
-        const formatted = dynamic.map(p =>
-            `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">${p.date}-${p.title.replace(/</g,'&lt;')}</a>`
-        );
-        return write(formatted.join('  '));
-    }
+            const html = items.map(p =>
+                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">
+                    ${p.date}-${p.title.replace(/</g,'&lt;')}
+                </a>`
+            ).join('  ');
 
-    const currentDirNode = getNodeFromPath(pathToCheck);
-    if (currentDirNode && currentDirNode.type === 'dir') {
-        const children = Object.keys(currentDirNode.children);
-        if (children.length > 0) {
-            const basePath = pathToCheck === '/' ? '' : pathToCheck;
-            const formatted = children.map(name => {
-                const node = currentDirNode.children[name];
-                const full = `${basePath}${basePath.endsWith('/') ? '' : '/'}${name}`;
-                if (node.type === 'dir') {
-                    return `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${full}">${name}/</a>`;
-                } else {
-                    return `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${full}">${name}</a>`;
-                }
-            });
-            write(formatted.join('  '));
-        } else {
-            write('Directory is empty.');
+            return write(html);
+        } catch (e) {
+            return write(`ls: failed to load index for ${dynamicPath}`);
         }
-    } else {
-        write(`No such directory: ${pathToCheck}`);
     }
+
+    //fallback to static VFS listing
+    const node = getNodeFromPath(pathToCheck);
+    if (node && node.type === 'dir') {
+        const children = Object.keys(node.children);
+        if (children.length === 0) return write('Directory is empty.');
+
+        const base = pathToCheck === '/' ? '' : pathToCheck;
+        const html = children.map(name => {
+            const child = node.children[name];
+            const full = `${base}${base.endsWith('/') ? '' : '/' }${name}`;
+            return child.type === 'dir'
+                ? `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${full}">${name}/</a>`
+                : `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${full}">${name}</a>`;
+        }).join('  ');
+
+        return write(html);
+    }
+
+  //error
+  write(`No such directory: ${pathToCheck}`);
 }
