@@ -1,38 +1,54 @@
 name: Blog from Issue
+
 on:
-    issues:
-        types: [opened, edited, labeled]
+  issues:
+    types: [opened, edited, labeled]
 
 permissions:
-    contents: write
-    issues: read
+  contents: write
+  issues: read
 
 jobs:
-    make-post:
-        if: contains(github.eve.issue.labels.*.name, 'blod-post')
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
+  make-post:
+    if: contains(github.event.issue.labels.*.name, 'blog')
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
 
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Make post
-              env:
-                ISSUE_JSON: ${{ toJson(github.event.issue) }}
-              run: node .github/scripts/make-post.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-            - name: Archive rollover
-              run: node .github/scripts/archive-posts.js
+      - name: Create post from issue
+        id: meta
+        run: node scripts/make-post.js
 
-            - name: Build indexes
-              run: node .github/scripts/build-index.js
+      - name: Build blog + archive indexes
+        run: node scripts/build-index.js
 
-            - name: Commit changes
-              run: |
-                git config user.name "github-actions[bot]"
-                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                git add blog/*.md blog/index.json old_posts/**/*.md old_posts/**/index.json
-                git commit -m "Blog: #${{ github.event.issue.number }} (post, archive, index)" || echo "Nothing to commit"
-                git push
+      - name: Commit & push
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name  "CI"
+            git config user.email "ci@users.noreply.github.com"
+            git add blog/*.md blog/index.json old_posts/**/*.json
+            git commit -m "post: ${{ steps.meta.outputs.date }} ${{ steps.meta.outputs.title }}"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Comment back on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const p = process.env.path || '${{ steps.meta.outputs.path }}';
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Post created at \`${p}\` and indexes rebuilt.`
+            });

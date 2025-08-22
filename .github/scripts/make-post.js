@@ -1,41 +1,48 @@
-// create /blog/DDMMYYYY-slug.md from Issue (with optional date override)
-const fs = require('fs');
-const path = require('path');
 
-const issue = JSON.parse(process.env.ISSUE_JSON)
+import fs from 'node:fs';
+import path from 'node:path';
 
-const pad = x => String(x).padStart(2, '0');
-const now = new Date();
+const EVENT_PATH = process.env.GITHUB_EVENT_PATH;
+if (!EVENT_PATH || !fs.existsSync(EVENT_PATH)) {
+    console.error('GITHUB_EVENT_PATH not found.');
+    process.exit(1);
+}
+
+const event = JSON.parse(fs.readFileSync(EVENT_PATH, 'utf8'));
+const issue = event.issue || {};
+const title = (issue.title || 'Untitled').trim();
+const body  = (issue.body  || '').trim();
+
+const pad = n => String(n).padStart(2, '0');
+const now  = new Date(new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }));
 const today = `${pad(now.getDate())}${pad(now.getMonth()+1)}${now.getFullYear()}`;
 
-const title = (issue.title || 'Untitled').trim();
-let body = (issue.body || '').trim();
+//date override: "date: DDMMYYYY" or "date: YYYY-MM-DD"
+const m1 = body.match(/^\s*date:\s*(\d{2})(\d{2})(\d{4})\s*$/im);
+const m2 = body.match(/^\s*date:\s*(\d{4})-(\d{2})-(\d{2})\s*$/im);
+const ddmmyyyy = m1 ? `${m1[1]}${m1[2]}${m1[3]}`
+    : m2 ? `${pad(m2[3])}${pad(m2[2])}${m2[1]}`
+    : today;
 
-//optional override for date of the post
-let override = null;
-const dateLine = body.match(/^\s*date:\s*(\d{8})\s*$/gim);
-if (dateLine) {
-    const m = /(\d{8})/.exec(dateLine[0]); if (m) override = m[1];
-    body = body.replace(/^\s*date:\s*\d{8}\s*$/gim, '').trim();
-}
+// slug override: "slug: my-custom-slug"
+const ms = body.match(/^\s*slug:\s*([a-z0-9-]+)\s*$/im);
+const baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'post';
+const slug = (ms ? ms[1] : baseSlug).toLowerCase();
 
-function validDDMMYYYY(dmy){
-    if(!/^\d{8}$/.test(dmy)) return false;
-    const dd=+dmy.slice(0,2), mm=+dmy.slice(2,4), yyyy=+dmy.slice(4);
-    if(mm<1||mm>12||dd<1||dd>31) return false;
-    const iso = `${yyyy}-${pad(mm)}-${pad(dd)}T00:00:00Z`;
-    const d = new Date(iso)
-    return d.getUTCFullYear()===yyyy && d.getUTCMonth()+1 ===mm && d.getUTCDate()===dd;
-}
+const fileName = `${ddmmyyyy}-${slug}.md`;
+const relPath  = path.join('blog', fileName);
 
-const dateId = (override&& validDDMMYYYY(override)) ? override : today;
-const slug = title.toLoweCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'post';
-
-const blogDir = 'blog';
-const filename = `${dateId}-${slug}.md`;
-const postPath = path.join(blogDir, filename);
+// Simple content: H1 + body
 const content = `# ${title}\n\n${body}\n`;
+fs.mkdirSync('blog', { recursive: true });
+fs.writeFileSync(relPath, content, 'utf8');
 
-fs.mkdirSync(blogDir, { recursive: true });
-fs.writeFileSync(postPath, content);
-console.log('Wrote ${postPath');
+// Emit outputs to workflow
+const out = process.env.GITHUB_OUTPUT;
+if (out) {
+    fs.appendFileSync(out, `path=${relPath}\n`);
+    fs.appendFileSync(out, `title=${title}\n`);
+    fs.appendFileSync(out, `date=${ddmmyyyy}\n`);
+}
+
+console.log(`Created ${relPath}`);
