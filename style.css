@@ -83,3 +83,26 @@ body {
     color: #ffffff;
   }
   
+.quick-menu {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 140px;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  z-index: 20;
+}
+
+.quick-menu a {
+  display: block;
+  padding: 6px 12px;
+  color: #000;
+  text-decoration: none;
+}
+
+.quick-menu a:hover {
+  background: #eee;
+}
