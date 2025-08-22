@@ -39,7 +39,6 @@ const scripts = {
     'cat contact.txt'
   ],
   'Blog': [
-    'clear',
     'cd /home',
     'ls',
     'cd /blog',
