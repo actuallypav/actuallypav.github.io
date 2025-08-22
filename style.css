@@ -120,3 +120,12 @@ body {
 .fs-link[data-fs-type="dir"]:visited {
   color: #1e90ff;
 }
+
+.fs-link[data-fs-type="file"] {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="file"]:visited {
+  color: #ffffff;
+}
