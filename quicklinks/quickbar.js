@@ -51,6 +51,9 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
     .find(a => a.textContent.trim().toLowerCase() === 'blog');
   if (!blogLink) return;
 
+  if (blogLink.__blogBound) return;
+  blogLink.__blogBound = true;
+
   //right-click cd /blog && ls
   blogLink.addEventListener('contextmenu', (e) => {
     e.preventDefault();
