@@ -93,7 +93,7 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
 
     // position directly under "Blog" (no getBoundingClientRect needed)
     menu.style.position = 'absolute';
-    menu.style.left = blogLink.offsetLeft + 'px';
+    menu.style.left = (blogLink.offsetLeft - 10) + 'px';
     menu.style.top  = (blogLink.offsetTop + blogLink.offsetHeight + 4) + 'px';
 
     // handle clicks on links
