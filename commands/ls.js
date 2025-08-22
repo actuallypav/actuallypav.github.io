@@ -40,17 +40,14 @@ export default async function ls(write, args, { path }) {
         console.log('[ls] dynamicPath=', dynamicPath);
         try {
             const items = await listBlog(dynamicPath); // expects [{path,date,title}]
-            if (!items || items.length === 0) return write('Directory is empty.');
-
+            if (!items?.length) return write('Directory is empty.');
             const html = items.map(p =>
-                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">
-                    ${p.date}-${p.title.replace(/</g,'&lt;')}
-                </a>`
+                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">${p.date}-${p.title.replace(/</g,'&lt;')}</a>`
             ).join('  ');
-
-            return write(html);
+            return write(html);                     // 👈 ensure this return
         } catch (e) {
-            return write(`ls: failed to load index for ${dynamicPath}`);
+            console.error('ls dynamic error', e);
+            return write(`ls: failed to load index for ${dynamicPath}`);  // 👈 and this return
         }
     }
 
