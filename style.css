@@ -107,3 +107,16 @@ body {
 .quick-menu a:hover {
   background: #eee;
 }
+
+.fs-link {
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="dir"] {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="dir"]:visited {
+  color: #1e90ff;
+}
