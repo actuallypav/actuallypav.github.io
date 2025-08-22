@@ -46,8 +46,12 @@ export default async function cat(write, args, env) {
     //handle blog/old_posts
     const raw = args[0] || '';
     let target = raw
+        .replace(/^\/home\/[^/]+\/blog\/old_posts(\/|$)/, '/old_posts$1')
+        // blog root under home: /home/<user>/blog/... -> /blog/...
         .replace(/^\/home\/[^/]+\/blog(\/|$)/, '/blog$1')
-        .replace(/^\/home\/[^/]+\/old_posts(\/|$)/, '/old_posts$1');
+        // absolute forms without /home (in case user types "blog/..." etc.)
+        .replace(/^blog\/old_posts(\/|$)/, '/old_posts$1')
+        .replace(/^blog(\/|$)/, '/blog$1');
 
     if (/^(\/)?(blog|old_posts)\//.test(target)) {
         if (!/\.md$/i.test(target)) target += '.md';
