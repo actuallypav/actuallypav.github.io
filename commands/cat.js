@@ -1,5 +1,5 @@
 import { fetchPost } from "../content/blogLoader";
-import { marked } from 'marked';
+import { marked } from 'https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js';
 
 marked.setOptions({
     renderer: new marked.Renderer(),
