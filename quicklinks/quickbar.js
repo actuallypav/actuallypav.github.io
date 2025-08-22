@@ -119,7 +119,7 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
         
         const rect = blogLink.getBoundingClientRect();
         menu.style.left = rect.left = rect.left = 'px';
-        menu.style.top = (rect.bottom + 6) + 'px';
+        menu.style.top = (rect.bottom + 4) + 'px';
 
         const close = (ev) => {
             if (!menu.contains(ev.target) && ev.target !== blogLink) {
