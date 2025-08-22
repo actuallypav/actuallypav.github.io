@@ -40,15 +40,27 @@ export default async function ls(write, args, { path }) {
     if (dynamicPath) {
         console.log('[ls] dynamicPath=', dynamicPath);
         try {
-            const items = await listBlog(dynamicPath); // expects [{path,date,title}]
-            if (!items?.length) return write('Directory is empty.');
-            const html = items.map(p =>
-                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">${p.date}-${p.title.replace(/</g,'&lt;')}</a>`
-            ).join('  ');
-            return write(html);                     // 👈 ensure this return
+            const items = await listBlog(dynamicPath); // [{path,date,title}]
+            const posts = (items || []).map(p =>
+                `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">
+                    ${p.date}-${p.title.replace(/</g,'&lt;')}
+                </a>`
+        );
+
+        // show the nested archive directory when listing /home/<user>/blog
+        const isHomeBlog = /^\/home\/[^/]+\/blog\/?$/.test(pathToCheck);
+        if (isHomeBlog) {
+            const oldPath = pathToCheck.replace(/\/$/, '') + '/old_posts';
+            posts.unshift(
+                `<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${oldPath}">old_posts/</a>`
+            );
+        }
+
+        if (!posts.length) return write('Directory is empty.');
+        return write(posts.join('  '));
         } catch (e) {
             console.error('ls dynamic error', e);
-            return write(`ls: failed to load index for ${dynamicPath}`);  // 👈 and this return
+            return write(`ls: failed to load index for ${dynamicPath}`);
         }
     }
 
