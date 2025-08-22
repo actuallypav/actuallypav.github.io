@@ -47,18 +47,16 @@ export default async function cat(write, args, env) {
     const raw = args[0] || '';
     let target = raw
         .replace(/^\/home\/[^/]+\/blog\/old_posts(\/|$)/, '/old_posts$1')
-        // blog root under home: /home/<user>/blog/... -> /blog/...
         .replace(/^\/home\/[^/]+\/blog(\/|$)/, '/blog$1')
-        // absolute forms without /home (in case user types "blog/..." etc.)
         .replace(/^blog\/old_posts(\/|$)/, '/old_posts$1')
         .replace(/^blog(\/|$)/, '/blog$1');
+
 
     if (/^(\/)?(blog|old_posts)\//.test(target)) {
         if (!/\.md$/i.test(target)) target += '.md';
         try {
             const md = await fetchPost(target.startsWith('/') ? target : `/${target}`);
-            const html = marked.parse(md);
-            write(html);
+            write(marked.parse(md));
             return;
         } catch (e) {
             return write(`cat: ${target}: ${e.message}`);
