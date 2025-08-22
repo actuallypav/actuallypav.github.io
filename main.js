@@ -2,7 +2,8 @@ import { initializeTerminal } from './UI/layout.js';
 import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
 import { terminalState } from './terminalContext.js';
-import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
+import { addBlogQuicklink, initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
+
 
 const term = document.getElementById('terminal');
 initializeTerminal(term)
@@ -308,6 +309,7 @@ const updatePathRef = {
 };
 
 initQuickbarTerminalBindings(term, username, hostname, write, updatePathRef);
+addBlogQuicklink(term, username, hostname, write, updatePathRef);
 
 write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alternatively "Right-Click" on "Portfolio" or "Resume" to begin.');
 render();
