@@ -48,89 +48,89 @@ const scripts = {
 };
 
 export function addBlogQuicklink(termRef, username, hostname, write, updatePath) {
-    const blogLink = Array.from(document.querySelectorAll('#quick-bar a'))
-        .find(a => a.textContent.trim().toLowerCase() === 'blog');
-    if (!blogLink) return;
+  const blogLink = Array.from(document.querySelectorAll('#quick-bar a'))
+    .find(a => a.textContent.trim().toLowerCase() === 'blog');
+  if (!blogLink) return;
 
-    //right-click: cd /blog && ls
-    blogLink.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
-        (async () => {
-            for (const cmd of steps) {
-                runCommand(cmd, username, hostname, write, {
-                    cwd: updatePath.getCwd(),
-                    path: updatePath.getPath(),
-                    fs,
-                    getNodeFromPath,
-                    updatePath: (newPath) => {
-                        updatePath.setPath(newPath);
-                        updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
-                    }
-                });
-                terminalState.buffer = '';
-                terminalState.cursorPos = 0;
-                terminalState.render();
-                await new Promise(r => setTimeout(r, 120));
+  //right-click cd /blog && ls
+  blogLink.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
+    (async () => {
+      for (const cmd of steps) {
+        runCommand(cmd, username, hostname, write, {
+          cwd: updatePath.getCwd(),
+          path: updatePath.getPath(),
+          fs,
+          getNodeFromPath,
+          updatePath: (newPath) => {
+            updatePath.setPath(newPath);
+            updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
+          }
+        });
+        terminalState.buffer = '';
+        terminalState.cursorPos = 0;
+        terminalState.render();
+        await new Promise(r => setTimeout(r, 120));
+      }
+    })();
+  });
+
+  //left-click dropdown
+  blogLink.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    let menu = blogLink.nextElementSibling;
+    if (menu && menu.classList.contains('quick-menu')) return menu.remove();
+
+    menu = document.createElement('div');
+    menu.className = 'quick-menu';
+    menu.innerHTML = `
+      <a href="#" data-cmd="blog latest">Blog latest</a>
+      <a href="#" data-cmd="cd /blog && ls">Blog recent</a>
+      <a href="#" data-cmd="cd /old_posts && ls">Blog archive</a>
+    `;
+    blogLink.after(menu);
+
+    // position directly under "Blog" (no getBoundingClientRect needed)
+    menu.style.position = 'absolute';
+    menu.style.left = blogLink.offsetLeft + 'px';
+    menu.style.top  = (blogLink.offsetTop + blogLink.offsetHeight + 4) + 'px';
+
+    // handle clicks on links
+    menu.addEventListener('click', (ev) => {
+      const a = ev.target.closest('a[data-cmd]');
+      if (!a) return;
+      ev.preventDefault();
+      const chain = a.dataset.cmd.split('&&').map(s => s.trim());
+      (async () => {
+        for (const c of chain) {
+          runCommand(c, username, hostname, write, {
+            cwd: updatePath.getCwd(),
+            path: updatePath.getPath(),
+            fs,
+            getNodeFromPath,
+            updatePath: (newPath) => {
+              updatePath.setPath(newPath);
+              updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
             }
-        })();
+          });
+          terminalState.buffer = '';
+          terminalState.cursorPos = 0;
+          terminalState.render();
+          await new Promise(r => setTimeout(r, 120));
+        }
+      })();
+      menu.remove();
     });
 
-    //left-click: dropdown
-    blogLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        let menu = blogLink.nextElementSibling;
-        if (menu && menu.classList.contains('quick-menu')) return menu.remove();
-
-        menu = document.createElement('div');
-        menu.className = 'quick-menu';
-        menu.innerHTML = `
-            <a href="#" data-cmd="blog latest">Blog latest</a><br>
-            <a href="#" data-cmd="cd /blog && ls">Blog recent</a><br>
-            <a href="#" data-cmd="cd /old_posts && ls">Blog archive</a>
-        `;
-        Object.assign(menu.style, {
-            position: 'absolute', zIndex: 10, background: '#111',
-            border: '1px solid #333', padding: '6px', borderRadius: '8px'
-        });
-        blogLink.after(menu);
-
-        menu.addEventListener('click', (ev) => {
-            const a = ev.target.closest('a[data.cmd');
-            if (!a) return;
-            const chain = a.dataset.cmd.split('&&').map(s => s.trim());
-            (async () => {
-                for (const c of chain) {
-                    runCommand(c, username, hostname, write, {
-                        cwd: updatePath.getCwd(),
-                        path: updatePath.getPath(),
-                        fs,
-                        getNodeFromPath,
-                        updatePath: (newPath) => {
-                            updatePath.setPath(newPath);
-                            updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
-                        }
-                    });
-                    terminalState.buffer = '';
-                    terminalState.cursorPos = 0;
-                    terminalState.render();
-                    await new Promise(r => setTimeout(r, 120));
-                }
-            })();
-            menu.remove();
-        });
-        
-        const rect = blogLink.getBoundingClientRect();
-        menu.style.left = (linkRect.left - barRect.left) + 'px';
-        menu.style.top  = (linkRect.bottom - barRect.top + 4) + 'px';
-
-        const close = (ev) => {
-            if (!menu.contains(ev.target) && ev.target !== blogLink) {
-                menu.remove(); document.removeEventListener('click', close);
-            }
-        };
-        setTimeout(() => document.addEventListener('click', close), 0);
-    });
+    const close = (ev) => {
+      if (!menu.contains(ev.target) && ev.target !== blogLink) {
+        menu.remove(); document.removeEventListener('click', close);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', close), 0);
+  });
 }
 
 export function initQuickbarTerminalBindings(termRef, username, hostname, write, updatePathRef) {
