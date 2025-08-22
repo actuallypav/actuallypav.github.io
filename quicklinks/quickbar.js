@@ -37,12 +37,6 @@ const scripts = {
     'cd contact',
     'ls',
     'cat contact.txt'
-  ],
-  'Blog': [
-    'cd /home',
-    'ls',
-    'cd /blog',
-    'ls'
   ]
 };
 
