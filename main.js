@@ -316,22 +316,22 @@ render();
 
 terminalState.render = render;
 
-// make ls output clickable
-function runCmd(c) {
-  buffer = c;
-  cursorPos = c.length;
-  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter'}));
-}
+// // make ls output clickable
+// function runCmd(c) {
+//   buffer = c;
+//   cursorPos = c.length;
+//   document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter'}));
+// }
 
-term.addEventListener('click', e => {
-  const a = e.target.closest('a.fs-link');
-  if (!a) return;
-  e.preventDefault();
-  const p = a.dataset.fsPath, t = a.dataset.fsType;
-  if (t === 'dir') {
-    runCmd(`cd ${p}`);
-    setTimeout(() => runCmd('ls'), 150);
-  } else {
-    runCmd(`cat ${p}`);
-  }
-});
+// term.addEventListener('click', e => {
+//   const a = e.target.closest('a.fs-link');
+//   if (!a) return;
+//   e.preventDefault();
+//   const p = a.dataset.fsPath, t = a.dataset.fsType;
+//   if (t === 'dir') {
+//     runCmd(`cd ${p}`);
+//     setTimeout(() => runCmd('ls'), 150);
+//   } else {
+//     runCmd(`cat ${p}`);
+//   }
+// });
