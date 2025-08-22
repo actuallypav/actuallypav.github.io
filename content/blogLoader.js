@@ -14,11 +14,32 @@ export async function list(dirPath) {
     if (dirPath === '/blog'){
         return await getJSON('/blog/index.json');
     }
-    const m = dirPath.match(/^\/old_posts\/(\d{4})\/(\d{2})$/);
-    if (m) {
-        const [_, y, mm] = m;
-        return await getJSON(`/old_posts/${y}/${mm}/index.json`);
+
+    if (dirPath.startsWith('/old_posts')) {
+        const all = await getJSON('/old_posts/index.json');
+
+        const m = dirPath.match(/^\/old_posts(?:\/(\d{4})(?:\/(\d{2}))?)?$/);
+        if(!m) return null;
+        const [, y, mm] = m;
+        if (!y) {
+            return Array.from(
+                new Set(all.map(p => p.path.split('/')[2]))
+            ).sort();
+        }
+
+        if (!mm) {
+            return Array.from(
+                new Set(
+                    all
+                        .filter(p => p.path.includes(`/old_posts/${y}/`))
+                        .map(p => p.path.split('/')[3])
+                )
+            ).sort();
+        }
+
+        return all.filter(p => p.path.includes(`/old_posts/${y}/${mm}/`));
     }
+
     return null;
 }
 
