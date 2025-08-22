@@ -314,45 +314,45 @@ addBlogQuicklink(term, username, hostname, write, updatePathRef);
 write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alternatively "Right-Click" on "Portfolio" or "Resume" to begin.');
 render();
 
-terminalState.render = render;
-if (!window.__fsLinksBound) {
-    window.__fsLinksBound = true;
+// terminalState.render = render;
+// if (!window.__fsLinksBound) {
+//     window.__fsLinksBound = true;
 
-    function executeDirect(cmd) {
-      write(getPrompt() + cmd);
+//     function executeDirect(cmd) {
+//       write(getPrompt() + cmd);
 
-      if (cmd.trim() !== "") {
-        commandHistory.push(cmd);
-      }
+//       if (cmd.trim() !== "") {
+//         commandHistory.push(cmd);
+//       }
 
-      runCommand(cmd, username, hostname, write, {
-        cwd,
-        path,
-        fs,
-        getNodeFromPath,
-        updatePath: (newPath) => {
-          path = newPath;
-          cwd = path.replace(`/home/${username}`, `~`);
-        }
-      });
+//       runCommand(cmd, username, hostname, write, {
+//         cwd,
+//         path,
+//         fs,
+//         getNodeFromPath,
+//         updatePath: (newPath) => {
+//           path = newPath;
+//           cwd = path.replace(`/home/${username}`, `~`);
+//         }
+//       });
 
-      buffer = '';
-      historyIndex = commandHistory.length;
-      cursorPos = 0;
-      render();
-    }
+//       buffer = '';
+//       historyIndex = commandHistory.length;
+//       cursorPos = 0;
+//       render();
+//     }
 
-    term.addEventListener('click', e => {
-      const a = e.target.closest('a.fs-link');
-      if (!a) return;
-      e.preventDefault();
+//     term.addEventListener('click', e => {
+//       const a = e.target.closest('a.fs-link');
+//       if (!a) return;
+//       e.preventDefault();
 
-      const p = a.dataset.fsPath, t = a.dataset.fsType;
-      if (t === 'dir') {
-        executeDirect(`cd ${p}`);
-        setTimeout(() => executeDirect('ls'), 150);
-      } else {
-        executeDirect(`cat ${p}`);
-      }
-    });
-}
+//       const p = a.dataset.fsPath, t = a.dataset.fsType;
+//       if (t === 'dir') {
+//         executeDirect(`cd ${p}`);
+//         setTimeout(() => executeDirect('ls'), 150);
+//       } else {
+//         executeDirect(`cat ${p}`);
+//       }
+//     });
+// }
