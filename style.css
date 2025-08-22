@@ -20,7 +20,7 @@ body {
   }
   
   .prompt-path {
-    color: #2e2f6e;
+    color: #1e90ff;
     font-weight: bold;
   }
 
@@ -50,7 +50,7 @@ body {
   }
 
   .directory {
-    color: #2e2f6e;
+    color: #1e90ff;
     font-weight: bold;
   }
 
