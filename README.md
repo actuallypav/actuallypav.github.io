@@ -1,11 +1,12 @@
-# ActuallyPav’s Terminal Portfolio
+ActuallyPav’s Terminal Portfolio
+--------------------------------
 
-## Overview
+### Overview
 This project is an interactive **Ubuntu-style terminal emulator** built for the web, serving as a unique portfolio experience. Instead of a standard webpage, visitors can explore your work and information by typing commands into a simulated shell environment.
 
 Live Demo: [pawelambrozy.com](https://pawelambrozy.com/)
 
-## Features
+### Features
 - Realistic terminal UI with prompt, commands, and filesystem navigation.
 - Basic Linux-like commands (`ls`, `cd`, `cat`, `clear`, etc.).
 - Custom portfolio commands (projects, about, resume, quick links).
@@ -13,12 +14,12 @@ Live Demo: [pawelambrozy.com](https://pawelambrozy.com/)
 - Responsive design for desktop and mobile.
 - Extensible architecture – new commands can be added easily.
 
-## Getting Started
+### Getting Started
 
-### Prerequisites
+#### Prerequisites
 - Any modern browser (Chrome, Firefox, Safari, Edge, Zen).
 
-### Usage
+#### Usage
 
 When you load the page:
 You’ll be prompted for a username (defaults to "user" if left empty).
@@ -31,7 +32,7 @@ cd projects
 cat about.md
 ```
 
-### Available Commands
+#### Available Commands
 ```bash
 ls – List files in directory
 cd <dir> – Change directory
@@ -41,7 +42,7 @@ about, info – Portfolio details
 clear – Clear the terminal
 ```
 
-### Project Struccture
+#### Project Struccture
 ```bash
 .
 ├── index.html         # Entry point
