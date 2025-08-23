@@ -89,18 +89,27 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
 
     blogLink.after(menu);
 
+    // document.body.appendChild(menu);
+    // const r = blogLink.getBoundingClientRect();
+
+    // const right = Math.max(8, window.innerWidth - r.right);
+    // menu.style.right = `${right}px`
+    // menu.style.top = `${r.bottom + 4}px`;
+
+    // // position directly under "Blog" (no getBoundingClientRect needed)
+    // menu.style.position = 'absolute';
+    // menu.style.left = (blogLink.offsetLeft - 10) + 'px';
+    // menu.style.top  = (blogLink.offsetTop + blogLink.offsetHeight + 4) + 'px';
+
     document.body.appendChild(menu);
     const r = blogLink.getBoundingClientRect();
 
     const right = Math.max(8, window.innerWidth - r.right);
-    menu.style.right = `${right}px`
-    menu.stlye.left = 'auto';
+    menu.style.right = `${right}px`;
+    menu.style.left = 'auto';
     menu.style.top = `${r.bottom + 4}px`;
+    menu.style.position = 'fixed';   // important: not absolute
 
-    // position directly under "Blog" (no getBoundingClientRect needed)
-    menu.style.position = 'absolute';
-    menu.style.left = (blogLink.offsetLeft - 10) + 'px';
-    menu.style.top  = (blogLink.offsetTop + blogLink.offsetHeight + 4) + 'px';
 
     // handle clicks on links
     menu.addEventListener('click', (ev) => {
