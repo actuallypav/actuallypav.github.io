@@ -92,9 +92,9 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
     document.body.appendChild(menu);
     const r = blogLink.getBoundingClientRect();
 
-    const right = Math.max(8 - window.innerWidth - r.right);
+    const right = Math.max(8, window.innerWidth - r.right);
     menu.style.right = `${right}px`
-    menu.stye.left = 'auto';
+    menu.stlye.left = 'auto';
     menu.style.top = `${r.bottom + 4}px`;
 
     // position directly under "Blog" (no getBoundingClientRect needed)
