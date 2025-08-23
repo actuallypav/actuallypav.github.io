@@ -105,7 +105,7 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
     const r = blogLink.getBoundingClientRect();
 
     const right = Math.max(8, window.innerWidth - r.right);
-    menu.style.right = `${right - 25}px`;
+    menu.style.right = `${right - 22}px`;
     menu.style.left = 'auto';
     menu.style.top = `${r.bottom + 4}px`;
     menu.style.position = 'fixed';
