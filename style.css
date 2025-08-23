@@ -94,18 +94,24 @@ body {
   font: inherit;
   color: #000;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  right: auto; 
+  left: 0; 
 }
 
 .quick-menu a {
   display: block;
-  padding: 0px 0px;
+  padding: 2px 8px;
   text-decoration: none;
   color: inherit;
   white-space: nowrap;
 }
 
 .quick-menu a:hover {
-  background: #eee;
+  background: #ffffff8a;
 }
 
 .fs-link {
