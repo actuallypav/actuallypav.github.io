@@ -29,7 +29,7 @@ if (username !== 'user' && fs['/'].children['home'].children['user']) {
   delete fs['/'].children['home'].children['user'];
 }
 
-var ubuError = new Audio('./audio/bell.oga');
+var ubuError = new Audio('./media/audio/bell.oga');
 
 export const getPrompt = () =>
   `<span class="prompt-user">${username}@${hostname}</span>` +
