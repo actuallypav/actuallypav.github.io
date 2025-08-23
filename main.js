@@ -62,6 +62,8 @@ const render = () => {
   term.scrollTop = term.scrollHeight;
 };
 
+terminalState.render = render;
+
 document.addEventListener('keydown', (e) => {
   const scrollTop = term.scrollTop;
 
