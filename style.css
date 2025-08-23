@@ -100,6 +100,7 @@ body {
   gap: 2px;
   right: auto; 
   left: 0; 
+  transform: translateX(-5px);
 }
 
 .quick-menu a {
