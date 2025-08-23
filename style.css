@@ -84,7 +84,7 @@ body {
   }
   
 .quick-menu {
-  position: absolute;
+  position: fixed;
   z-index: 100;
   background: #300924;
   border: 1px solid #ccc;
@@ -98,14 +98,13 @@ body {
   display: inline-flex;
   flex-direction: column;
   gap: 2px;
-  right: auto; 
-  left: 0; 
-  transform: translateX(-50px);
+  box-sizing: border-box;
 }
 
 .quick-menu a {
   display: block;
   padding: 2px 8px;
+  line-height: 1.2;
   text-decoration: none;
   color: inherit;
   white-space: nowrap;

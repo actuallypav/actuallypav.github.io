@@ -86,7 +86,15 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
       <a href="#" data-cmd="cd /blog && ls">Recent</a>
       <a href="#" data-cmd="cd /old_posts && ls">Archive</a>
     `;
+
     blogLink.after(menu);
+
+    document.body.appendChild(menu);
+    const r = blogLink.getBoundingClientRect();
+
+    const left = Math.min(window.innerWidth - menu.offsetWidth - 8, r.left);
+    menu.style.left = `${left}px`
+    menu.style.top = `${r.bottom + 4}px`;
 
     // position directly under "Blog" (no getBoundingClientRect needed)
     menu.style.position = 'absolute';
