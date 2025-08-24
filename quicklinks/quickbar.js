@@ -99,6 +99,7 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
     menu.style.left = 'auto';
     menu.style.top = `${r.bottom + 4}px`;
     menu.style.position = 'fixed';
+    menu.style.zIndex = '2000';
 
 
     // handle clicks on links
