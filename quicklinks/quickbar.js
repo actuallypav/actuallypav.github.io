@@ -46,7 +46,7 @@ const scripts = {
     'cd /home/${username}/blog/old_posts',
     'ls'
   ],
-  'Blog': [
+  'Blog:Latest': [
     'blog latest'
   ]
 };
