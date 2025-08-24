@@ -157,4 +157,8 @@ body {
 #terminal {
   margin-top: 40px;
   margin-right: 40%;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: hidden;
 }
