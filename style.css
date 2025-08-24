@@ -144,15 +144,16 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 44px;
-  background: #111;
+  height: 40px;
+  background: #300924;
   z-index: 1000;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 16px;
   padding: 0 12px;
 }
 
 #terminal {
-  margin-top: 44px;
+  margin-top: 40px;
 }
