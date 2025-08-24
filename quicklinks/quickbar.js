@@ -51,8 +51,6 @@ const scripts = {
   ]
 };
 
-const expand = (s) => s.replaceAll('${username}', username);
-
 export function addBlogQuicklink(termRef, username, hostname, write, updatePath) {
   const blogLink = Array.from(document.querySelectorAll('#quick-bar a'))
     .find(a => a.textContent.trim().toLowerCase() === 'blog');
