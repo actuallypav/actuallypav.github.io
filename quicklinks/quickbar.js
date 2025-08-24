@@ -37,8 +37,21 @@ const scripts = {
     'cd contact',
     'ls',
     'cat contact.txt'
+  ],
+  'Blog:Recent': [
+    'cd /home/${username}/blog',
+    'ls'
+  ],
+  'Blog:Archive': [
+    'cd /home/${username}/blog/old_posts',
+    'ls'
+  ],
+  'Blog': [
+    'blog latest'
   ]
 };
+
+const expand = (s) => s.replaceAll('${username}', username);
 
 export function addBlogQuicklink(termRef, username, hostname, write, updatePath) {
   const blogLink = Array.from(document.querySelectorAll('#quick-bar a'))
@@ -49,27 +62,18 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
   blogLink.__blogBound = true;
 
   //right-click cd /blog && ls
-  blogLink.addEventListener('contextmenu', (e) => {
+  blogLink.addEventListener('contextmenu', async (e) => {
     e.preventDefault();
+    if (isRunning) return;                                 
+    isRunning = true;                                      
+
     const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
-    (async () => {
-      for (const cmd of steps) {
-        runCommand(cmd, username, hostname, write, {
-          cwd: updatePath.getCwd(),
-          path: updatePath.getPath(),
-          fs,
-          getNodeFromPath,
-          updatePath: (newPath) => {
-            updatePath.setPath(newPath);
-            updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
-          }
-        });
-        terminalState.buffer = '';
-        terminalState.cursorPos = 0;
-        terminalState.render();
-        await new Promise(r => setTimeout(r, 120));
-      }
-    })();
+
+    for (const cmd of steps) {
+      await typeAndRunCommand(cmd, username, hostname, write, updatePath); 
+    }
+
+    isRunning = false;                                    
   });
 
   //left-click dropdown
@@ -89,18 +93,6 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
 
     blogLink.after(menu);
 
-    // document.body.appendChild(menu);
-    // const r = blogLink.getBoundingClientRect();
-
-    // const right = Math.max(8, window.innerWidth - r.right);
-    // menu.style.right = `${right}px`
-    // menu.style.top = `${r.bottom + 4}px`;
-
-    // // position directly under "Blog" (no getBoundingClientRect needed)
-    // menu.style.position = 'absolute';
-    // menu.style.left = (blogLink.offsetLeft - 10) + 'px';
-    // menu.style.top  = (blogLink.offsetTop + blogLink.offsetHeight + 4) + 'px';
-
     document.body.appendChild(menu);
     const r = blogLink.getBoundingClientRect();
 
@@ -112,29 +104,21 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
 
 
     // handle clicks on links
-    menu.addEventListener('click', (ev) => {
+    menu.addEventListener('click', async (ev) => {
       const a = ev.target.closest('a[data-cmd]');
       if (!a) return;
       ev.preventDefault();
+      if (isRunning) return;                                
+      isRunning = true;                                     
+
       const chain = a.dataset.cmd.split('&&').map(s => s.trim());
-      (async () => {
-        for (const c of chain) {
-          runCommand(c, username, hostname, write, {
-            cwd: updatePath.getCwd(),
-            path: updatePath.getPath(),
-            fs,
-            getNodeFromPath,
-            updatePath: (newPath) => {
-              updatePath.setPath(newPath);
-              updatePath.setCwd(newPath.replace(`/home/${username}`, `~`));
-            }
-          });
-          terminalState.buffer = '';
-          terminalState.cursorPos = 0;
-          terminalState.render();
-          await new Promise(r => setTimeout(r, 120));
-        }
-      })();
+
+      //animate typing for each command
+      for (const cmd of chain) {
+        await typeAndRunCommand(cmd, username, hostname, write, updatePath);
+      }
+
+      isRunning = false;                                    
       menu.remove();
     });
 
