@@ -85,7 +85,7 @@ body {
   
 .quick-menu {
   position: fixed;
-  z-index: 100;
+  z-index: 2000;
   background: #300924;
   border: 1px solid #ccc;
   border-radius: 0;
