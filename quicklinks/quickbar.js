@@ -59,20 +59,20 @@ export function addBlogQuicklink(termRef, username, hostname, write, updatePath)
   if (blogLink.__blogBound) return;
   blogLink.__blogBound = true;
 
-  //right-click cd /blog && ls
-  blogLink.addEventListener('contextmenu', async (e) => {
-    e.preventDefault();
-    if (isRunning) return;                                 
-    isRunning = true;                                      
+  // //right-click cd /blog && ls
+  // blogLink.addEventListener('contextmenu', async (e) => {
+  //   e.preventDefault();
+  //   if (isRunning) return;                                 
+  //   isRunning = true;                                      
 
-    const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
+  //   const steps = (scripts['Blog'] || []).map(c => c.replace('${username}', username));
 
-    for (const cmd of steps) {
-      await typeAndRunCommand(cmd, username, hostname, write, updatePath); 
-    }
+  //   for (const cmd of steps) {
+  //     await typeAndRunCommand(cmd, username, hostname, write, updatePath); 
+  //   }
 
-    isRunning = false;                                    
-  });
+  //   isRunning = false;                                    
+  // });
 
   //left-click dropdown
   blogLink.addEventListener('click', (e) => {
