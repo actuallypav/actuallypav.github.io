@@ -1,9 +1,8 @@
-name: Blog from Issue
+name: Blog from Issue (Python)
 
 on:
-  push
-  # issues:
-  #   types: [opened, edited, labeled]
+  issues:
+    types: [opened, edited, labeled]
 
 permissions:
   contents: write
