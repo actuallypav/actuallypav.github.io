@@ -2,7 +2,7 @@ import { runCommand } from "../commands.js";
 import { fs, getNodeFromPath } from "../vfs.js";
 import { terminalState } from "../terminalContext.js";
 import { getPrompt } from "../main.js";
-//
+///
 
 const links = document.querySelectorAll('#quick-bar a');
 let isRunning = false;
