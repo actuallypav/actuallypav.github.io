@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   make-post:
-    if: contains(github.event.issue.labels.*.name, 'blog')
+    if: contains(github.event.issue.labels.*.name, 'blog_post')
     runs-on: ubuntu-latest
     env:
       TZ: Europe/London
