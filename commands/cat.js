@@ -1,3 +1,6 @@
+import { fetchPost } from "../content/blogLoader.js";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js";
+
 marked.setOptions({
     renderer: new marked.Renderer(),
     gfm: true,
@@ -12,30 +15,55 @@ marked.setOptions({
     }
 });
 
-export const description = `cat [file]
-    Display the contents of a file, GitHub repository overview, or CV markdown file.
+export const description = `cat: cat [file|pattern]
+    Display the contents of files, GitHub repository overviews, or CV markdown files.
 
-    Supports:
-      - Regular files: outputs raw content.
-      - Portfolio: fetches and renders the "Overview" section of README.md from GitHub.
-      - Resume: loads and renders associated markdown (.md) file from /resume.
-      - Wildcards (*): matches and displays multiple entries.
+    file
+        Output the raw contents of the specified file.
 
-    If the target is a directory, an error message is shown: \`Is a directory\`.
-    If the specified file or path is not found, an error message is shown: \`No such file or directory\`.
+    pattern
+        Use wildcards (*) to match and display multiple files or repositories.
 
-    Arguments:
-      file     Path to a file.
-      *  Wildcard pattern to match multiple files or repos.
+    Special cases:
+        GitHub repository
+            Fetch and render the "Overview" section of README.md.
+        Resume
+            Load and render the associated markdown (.md) file from /resume.
+
+    Errors:
+        If the target is a directory, prints: "Is a directory".
+        If the file or path is not found, prints: "No such file or directory".
 
     Exit Status:
-    Returns success (0) if content is displayed. Returns a non-zero status and error message if the file is not found or is invalid.`;
+        0  if content is displayed.
+        >0 if the file is invalid, not found, or is a directory.`;
 
 export default async function cat(write, args, env) {
     if (args.length === 0) {
         return;
     }
 
+    //handle blog/old_posts
+    const raw = args[0] || '';
+    let target = raw
+        .replace(/^\/home\/[^/]+\/blog\/old_posts(\/|$)/, '/old_posts$1')
+        .replace(/^\/home\/[^/]+\/blog(\/|$)/, '/blog$1')
+        .replace(/^blog\/old_posts(\/|$)/, '/old_posts$1')
+        .replace(/^blog(\/|$)/, '/blog$1');
+
+
+    if (/^(\/)?(blog|old_posts)\//.test(target)) {
+        if (!/\.md$/i.test(target)) target += '.md';
+        try {
+            const md = await fetchPost(target.startsWith('/') ? target : `/${target}`);
+            write(marked.parse(md));
+            return;
+        } catch (e) {
+            return write(`cat: ${target}: ${e.message}`);
+        }
+    }
+
+    // --- generate default file path (VFS) ---
     const pathParts = args[0].startsWith('/')
         ? args[0].split('/')
         : (env.path + '/' + args[0]).split('/');
@@ -63,12 +91,10 @@ export default async function cat(write, args, env) {
 
                 if (fileNode.type === 'file') {
                     const fileContent = fileNode.content || '';
-                    write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank" style="text-decoration:none;">Content of ${repoName}</a></h3>`);
                     write(fileContent);
                 } else if (fileNode.type === 'repo') {
                     const repoNameWithExtension = file;
                     const repoName = repoNameWithExtension.substring(0, repoNameWithExtension.lastIndexOf('.'));
-                    console.log(`Attempting to fetch README.md for repo: ${repoName}`);
                     await fetchRepoContent(repoName, write);
                     write('<hr>');
                 } else if (fileNode.type === 'cv') {
@@ -88,7 +114,7 @@ export default async function cat(write, args, env) {
                     } catch (err) {
                         write(`cat: Error loading ${mdFileName}: ${err.message}`);
                     }
-                }
+                }   
             }
         } else {
             write(`cat: No files matching ${args[0]}`);
@@ -97,17 +123,14 @@ export default async function cat(write, args, env) {
     else if (node.type === 'repo') {
         const repoNameWithExtension = cleanParts[cleanParts.length - 1];
         const repoName = repoNameWithExtension.substring(0, repoNameWithExtension.lastIndexOf('.'));
-        console.log(`Attempting to fetch README.md for repo: ${repoName}`);
         await fetchRepoContent(repoName, write);
         write('<hr>');
     } 
     else if (node.type === 'cv') {
         const cvFile = cleanParts[cleanParts.length - 1];
-        console.log('[DEBUG] Entered CV block for:', cvFile);
         const mdFileName = cvFile.replace('.txt', '.md');
         const isContact = cvFile === 'contact.txt';
         const mdPath = isContact ? `../quicklinks/${mdFileName}`:`../resume/${mdFileName}`;
-        console.log('[DEBUG] mdPath resolved to:', mdPath);
         try {
             const response = await fetch(mdPath);
             if (response.ok) {
@@ -117,7 +140,7 @@ export default async function cat(write, args, env) {
                 write('<hr>');
             } else {
                 write(`cat: Could not load ${mdFileName}`);
-            }
+            } 
         } catch (err) {
             write(`cat: Error loading ${mdFileName}: ${err.message}`);
         }
@@ -155,13 +178,11 @@ async function fetchRepoContent(repoName, write) {
         const response = await fetch(githubUrl);
         if (response.ok) {
             let readmeContent = await response.text();
-
             const overviewContent = extractOverviewSection(readmeContent);
 
             if (overviewContent) {
                 const filteredContent = overviewContent.replace(/<img[^>]*>/gi, '');
                 const htmlContent = marked.parse(filteredContent);
-
                 write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Overview of ${repoName} (Repository)</a></h3>`);
                 write(htmlContent);
             } else {
@@ -178,9 +199,5 @@ async function fetchRepoContent(repoName, write) {
 function extractOverviewSection(content) {
     const overviewRegex = /## Overview\s*(.*?)(\n##|\n#|\n$)/s;
     const match = content.match(overviewRegex);
-
-    if (match && match[1]) {
-        return match[1].trim();
-    }
-    return null;
+    return (match && match[1]) ? match[1].trim() : null;
 }

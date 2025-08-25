@@ -2,7 +2,8 @@ import { initializeTerminal } from './UI/layout.js';
 import { commandDescriptions, runCommand } from './commands.js';
 import { fs, getNodeFromPath } from './vfs.js';
 import { terminalState } from './terminalContext.js';
-import { initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
+import { addBlogQuicklink, initQuickbarTerminalBindings } from './quicklinks/quickbar.js';
+
 
 const term = document.getElementById('terminal');
 initializeTerminal(term)
@@ -60,6 +61,8 @@ const render = () => {
   term.innerHTML = history + getPrompt() + `${beforeCursor}<span class="cursor${isIdle ? ' blink' : ''}">${atCursor}</span>${afterCursor}`;
   term.scrollTop = term.scrollHeight;
 };
+
+terminalState.render = render;
 
 document.addEventListener('keydown', (e) => {
   const scrollTop = term.scrollTop;
@@ -261,6 +264,31 @@ document.addEventListener('keydown', (e) => {
   resetIdle();
 });
 
+//simulate typing a command & pressing Enter so it goes through normal flow (history, prompt, etc.)
+function simulateRunCommand(cmd) {
+  buffer = cmd;
+  cursorPos = buffer.length;
+  const ev = new KeyboardEvent('keydown', { key: 'Enter' });
+  document.dispatchEvent(ev)
+}
+
+//clickable ls output: dirs = cd+ls, files = cat
+term.addEventListener('click', (e) => {
+  const link = e.target.closest('a.fs-link');
+  if (!link) return;
+  e.preventDefault();
+
+  const p = link.dataset.fsPath;
+  const t = link.dataset.fsType;
+
+  if (t === 'dir') {
+    simulateRunCommand(`cd ${p}`);
+    setTimeout(() => simulateRunCommand('ls'), 150);
+  } else {
+    simulateRunCommand(`cat ${p}`);
+  }
+});
+
 //export bits
 terminalState.username = username;
 
@@ -283,8 +311,7 @@ const updatePathRef = {
 };
 
 initQuickbarTerminalBindings(term, username, hostname, write, updatePathRef);
+addBlogQuicklink(term, username, hostname, write, updatePathRef);
 
 write('Pav-buntu 22.04 - an Ubuntu-Terminal-Inspired-Portfolio\nType "help" alternatively "Right-Click" on "Portfolio" or "Resume" to begin.');
 render();
-
-terminalState.render = render;

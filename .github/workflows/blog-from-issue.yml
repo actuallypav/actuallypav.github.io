@@ -1,0 +1,57 @@
+name: Blog from Issue (Python)
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  make-post:
+    if: contains(github.event.issue.labels.*.name, 'blog_post')
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create post from issue
+        id: create_post
+        run: python .github/scripts_py/make_post.py
+
+      - name: Archive old posts (keep 10 newest)
+        run: python .github/scripts_py/archive_posts.py
+
+      - name: Rebuild indexes (fast)
+        run: python .github/scripts_py/build_index.py
+
+      - name: Commit and push (if changes)
+        run: |
+          git config user.name "actuallypav"
+          git config user.email "61046893+actuallypav@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(blog): create post and rebuild indexes"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Comment back on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const p = `${{ steps.create_post.outputs.path }}` || 'blog/(unknown)';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ Post created at \`${p}\` and indexes rebuilt.`
+            });

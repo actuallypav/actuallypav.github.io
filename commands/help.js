@@ -1,17 +1,18 @@
 import { commandDescriptions } from '../commands.js';
 
-export const description = `help: help [command ...]
-\tDisplay information about commands.
+export const description = `help: help [command...]
+    Display information about commands.
 
-\tProvides general or specific information about available commands. 
-\tIf no command is specified, it lists all available commands. 
-\tIf a command is specified, it shows detailed information about that particular command.
+    Behavior:
+        With no arguments, lists all available commands.
+        With a command specified, shows detailed information
+        about that particular command.
 
-\tArguments:
-\t\tcommand   Name of the command to get help for
+    command
+        Name of the command to get help for.
 
-\tExit Status:
-\tReturns success unless an invalid command is specified.`;
+    Exit Status:
+        0  unless an invalid command is specified.`;
 
 export default function help(write, args) {
     if (args.length === 0) {

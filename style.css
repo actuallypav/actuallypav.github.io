@@ -20,7 +20,7 @@ body {
   }
   
   .prompt-path {
-    color: #2e2f6e;
+    color: #1e90ff;
     font-weight: bold;
   }
 
@@ -50,7 +50,7 @@ body {
   }
 
   .directory {
-    color: #2e2f6e;
+    color: #1e90ff;
     font-weight: bold;
   }
 
@@ -60,7 +60,7 @@ body {
     right: 20px;
     background-color: transparent;
     padding: 10px 15px;
-    z-index: 9999;
+    z-index: 1999;
     pointer-events: none;
   }
 
@@ -80,6 +80,85 @@ body {
 
   #quick-bar a:hover {
     text-decoration: underline;
-    color: #ffffff;
+    color: #ffffff8a;
   }
   
+.quick-menu {
+  position: fixed;
+  z-index: 2000;
+  background: #300924;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  padding: 0;
+  min-width: 0px;
+  width: max-content;
+  font: inherit;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+.quick-menu a {
+  display: block;
+  padding: 1px 6px;
+  line-height: 1.1;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.quick-menu a:hover {
+  background: #ffffff8a;
+}
+
+.fs-link {
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="dir"] {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="dir"]:visited {
+  color: #1e90ff;
+}
+
+.fs-link[data-fs-type="file"] {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.fs-link[data-fs-type="file"]:visited {
+  color: #ffffff;
+}
+
+.fs-link:hover { text-decoration: underline; }
+
+#quick-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: #300924;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 0 12px;
+}
+
+#terminal {
+  margin-top: 30px;
+  margin-right: 30%;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: hidden;
+}
