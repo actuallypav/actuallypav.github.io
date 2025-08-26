@@ -37,13 +37,16 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          git checkout -B main origin/main
+
           git config user.name "actuallypav"
           git config user.email "61046893+actuallypav@users.noreply.github.com"
+      
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "automation: create post and rebuild indexes"
-            git push
+            git commit -m "chore(blog): create post and rebuild indexes (closes #${ISSUE_NUMBER})"
+            git pull --rebase origin main
+            git push origin HEAD:main
             echo "Changes committed and pushed."
           else
             echo "No changes to commit."
