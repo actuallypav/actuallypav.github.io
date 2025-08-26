@@ -32,26 +32,27 @@ jobs:
       - name: Rebuild indexes
         run: python .github/scripts/build-index.py
 
-      - name: Commit and push (if changes)
+      - name: Commit, push, and close issue
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           git config user.name "actuallypav"
           git config user.email "61046893+actuallypav@users.noreply.github.com"
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "chore(blog): create post and rebuild indexes"
+            git commit -m "automation: create post and rebuild indexes"
             git push
+            echo "Changes committed and pushed."
           else
             echo "No changes to commit."
           fi
 
-      - name: Comment back on issue
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const p = `${{ steps.create_post.outputs.path }}` || 'blog/(unknown)';
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `Post created at \`${p}\` and indexes rebuilt.`
-            });
+          #close the issue
+          api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}"
+          curl -sS -X PATCH "$api_url" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -d '{"state":"closed"}'
