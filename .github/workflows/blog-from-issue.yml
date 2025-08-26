@@ -24,13 +24,13 @@ jobs:
 
       - name: Create post from issue
         id: create_post
-        run: python .github/scripts_py/make_post.py
+        run: python .github/scripts/make_post.py
 
       - name: Archive old posts (keep 10 newest)
-        run: python .github/scripts_py/archive_posts.py
+        run: python .github/scripts/archive_posts.py
 
       - name: Rebuild indexes (fast)
-        run: python .github/scripts_py/build_index.py
+        run: python .github/scripts/build_index.py
 
       - name: Commit and push (if changes)
         run: |
@@ -53,5 +53,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `✅ Post created at \`${p}\` and indexes rebuilt.`
+              body: `Post created at \`${p}\` and indexes rebuilt.`
             });
