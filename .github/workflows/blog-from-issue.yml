@@ -1,4 +1,4 @@
-name: Blog from Issue (Python)
+name: Blog from Issue
 
 on:
   issues:
