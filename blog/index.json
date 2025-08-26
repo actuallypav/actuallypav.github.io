@@ -1,7 +1,12 @@
 [
   {
-    "path": "/blog/21082025-welcome.md",
-    "date": "21082025",
+    "date": "2025-08-26",
+    "file": "blog/26082025-test7.md",
+    "title": "test7"
+  },
+  {
+    "date": "2025-08-21",
+    "file": "blog/21082025-welcome.md",
     "title": "Welcome"
   }
 ]
