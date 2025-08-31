@@ -14,6 +14,8 @@ if not os.path.exists(BLOG_DIR):
 entries = []
 for name in os.listdir(BLOG_DIR):
     if re.match(r"^\d{8}-.*\.md$", name):
+        if name.startswith("31082025-Welcome"):
+            continue
         dmy = name[:8]
         dd, mm, yyyy = dmy[0:2], dmy[2:4], dmy[4:8]
         ymd = f"{yyyy}{mm}{dd}"
