@@ -2,10 +2,8 @@ import { fetchPost } from "../content/blogLoader.js";
 import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js";
 
 marked.use({
-  gfm: true,
-  breaks: true,
-  smartLists: true,
-  smartypants: false
+  gfm: false,
+  breaks: false,
 });
 
 export const description = `cat: cat [file|pattern]
