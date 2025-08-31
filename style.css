@@ -162,3 +162,9 @@ body {
   word-wrap: break-word;
   overflow-x: hidden;
 }
+
+@media (max-width: 768px) {
+  #terminal {
+    margin-right: 0;
+  }
+}
