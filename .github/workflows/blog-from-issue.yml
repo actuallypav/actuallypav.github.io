@@ -1,4 +1,4 @@
-name: Blog from Issue (Python)
+name: Blog from Issue
 
 on:
   issues:
@@ -6,11 +6,11 @@ on:
 
 permissions:
   contents: write
-  issues: read
+  issues: write
 
 jobs:
   make-post:
-    if: contains(github.event.issue.labels.*.name, 'blog_post')
+    if: contains(github.event.issue.labels.*.name, 'blog-post')
     runs-on: ubuntu-latest
     env:
       TZ: Europe/London
@@ -24,34 +24,38 @@ jobs:
 
       - name: Create post from issue
         id: create_post
-        run: python .github/scripts_py/make_post.py
+        run: python .github/scripts/make-post.py
 
       - name: Archive old posts (keep 10 newest)
-        run: python .github/scripts_py/archive_posts.py
+        run: python .github/scripts/archive-posts.py
 
-      - name: Rebuild indexes (fast)
-        run: python .github/scripts_py/build_index.py
+      - name: Rebuild indexes
+        run: python .github/scripts/build-index.py
 
-      - name: Commit and push (if changes)
+      - name: Commit, push, and close issue
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git checkout -B main origin/main
+
           git config user.name "actuallypav"
           git config user.email "61046893+actuallypav@users.noreply.github.com"
+      
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "chore(blog): create post and rebuild indexes"
-            git push
+            git commit -m "chore(blog): create post and rebuild indexes (closes #${ISSUE_NUMBER})"
+            git pull --rebase origin main
+            git push origin HEAD:main
+            echo "Changes committed and pushed."
           else
             echo "No changes to commit."
           fi
 
-      - name: Comment back on issue
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const p = `${{ steps.create_post.outputs.path }}` || 'blog/(unknown)';
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `✅ Post created at \`${p}\` and indexes rebuilt.`
-            });
+          #close the issue
+          api_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}"
+          curl -sS -X PATCH "$api_url" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -d '{"state":"closed"}'
