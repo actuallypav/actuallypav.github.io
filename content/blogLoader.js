@@ -30,7 +30,12 @@ async function getCachedJSON(url) {
 export async function list(dirPath) {
     // /blog -> recent posts
     if (dirPath === '/blog') {
-        return await getCachedJSON('/blog/index.json');
+      const posts = await getCachedJSON('/blog/index.json');
+      return posts.map(p => {
+        const path = '/' + p.file.replace(/^\/+/, '');
+        const name = p.file.replace(/^blog\//, '').replace(/\.md$/i, '');
+        return { ...p, path, name }; // name = "31082025-welcome"
+      });
     }
 
   //anything outside old_posts we ignore

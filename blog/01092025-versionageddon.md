@@ -13,14 +13,14 @@ For the most part, this remains uniform across the software industry. Until we s
 Intel Core Processors - Generally used in a range of devices (e.g. Laptops, gaming PCs, workstations). For example, the `Intel Core 7 processor 150U` is split into:
 
 | Corporate Brand | Product Brand | Performance Tier | Generation | Suffix | SKU (Stock Keeping Unit) |
-|-----------------|---------------|------------------|------------|--------|--------------------------|
-| Intel           | Core          | 7                | 1          | U      | 185H           |
+| --- | --- | --- | --- | --- | --- |
+| Intel | Core | 7 | 1 | U | 185H |
 
 Intel Core Processors N-Series: Generally used in low-cost, low-powered (e.g. Chromebooks, mini PCs, Embedded devices), the naming convention changes to a different format. For example, the `Intel Core i3-N305 processor` uses:
 
 | Corporate Brand | Product Brand | Performance Tier | Prefix | SKU (Stock Keeping Unit) |
-|-----------------|---------------|------------------|--------|--------------------------|
-| Intel           | Core          | i3               | N      | N305                   |
+| --- | --- | --- | --- | --- |
+| Intel | Core | i3 | N | N305 |
 
 Suddenly, a key part of the naming convention changes. Having spoken to less tech-savvy people, they all identified the N-Series as more powerful - strictly from the name, quoting it as `N = New` or `Bigger number = Better`.
 
