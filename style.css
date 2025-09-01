@@ -213,7 +213,7 @@ br {
 
 /* Inline code */
 code {
-  background-color: rgba(0, 0, 0, 0.4);                       
+  background-color: rgba(0, 0, 0, 1);                       
   padding: 2px 6px;
   border-radius: 4px;
   font-family: monospace;
@@ -222,7 +222,7 @@ code {
 /* Code blocks */
 pre code {
   display: block;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 1);
   padding: 8px 12px;
   border-radius: 6px;
   overflow-x: auto;
