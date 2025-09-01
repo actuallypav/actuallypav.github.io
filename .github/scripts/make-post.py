@@ -32,7 +32,7 @@ while os.path.exists(rel_path):
     rel_path = os.path.join(rel_dir, f"{ddmmyyyy}-{slug}-{counter}.md")
     counter += 1
 
-content = f"# {title}\n\n{body}\n"
+content = f"## {title}\n\n{body}\n"
 with open(rel_path, "w", encoding="utf-8") as f:
     f.write(content)
 
