@@ -48,7 +48,7 @@ export default async function blog(write, args) {
 
   const arg = String(args[0]).toLowerCase();
 
-  // --- list / --list ---
+  //list
   if (arg === 'list' || arg === '--list') {
     const rows = posts.map(p => {
       const path = p.path || ('/' + String(p.file || '').replace(/^\/+/, ''));
