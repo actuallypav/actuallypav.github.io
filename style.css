@@ -162,3 +162,21 @@ body {
   word-wrap: break-word;
   overflow-x: hidden;
 }
+
+/* Markdown-It tables */
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #666;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+th {
+  background: #222;
+  font-weight: bold;
+}
