@@ -3,7 +3,7 @@ import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.es
 
 marked.use({
   gfm: true,
-  breaks: false,
+  breaks: false
 });
 
 export const description = `cat: cat [file|pattern]
@@ -32,18 +32,19 @@ export const description = `cat: cat [file|pattern]
 export default async function cat(write, args, env) {
   if (args.length === 0) return;
 
-  // handle blog/old_posts
-  const raw = args[0] || '';
+  const raw = args[0] || "";
   let target = raw
-    .replace(/^\/home\/[^/]+\/blog\/old_posts(\/|$)/, '/old_posts$1')
-    .replace(/^\/home\/[^/]+\/blog(\/|$)/, '/blog$1')
-    .replace(/^blog\/old_posts(\/|$)/, '/old_posts$1')
-    .replace(/^blog(\/|$)/, '/blog$1');
+    .replace(/^\/home\/[^/]+\/blog\/old_posts(\/|$)/, "/old_posts$1")
+    .replace(/^\/home\/[^/]+\/blog(\/|$)/, "/blog$1")
+    .replace(/^blog\/old_posts(\/|$)/, "/old_posts$1")
+    .replace(/^blog(\/|$)/, "/blog$1");
 
+  // --- blog / old_posts handling ---
   if (/^(\/)?(blog|old_posts)\//.test(target)) {
-    if (!/\.md$/i.test(target)) target += '.md';
+    if (!/\.md$/i.test(target)) target += ".md";
     try {
-      const md = await fetchPost(target.startsWith('/') ? target : `/${target}`);
+      let md = await fetchPost(target.startsWith("/") ? target : `/${target}`);
+      md = stripTopTitle(md); // remove plain top line like "Welcome"
       write(marked.parse(md));
       return;
     } catch (e) {
@@ -51,47 +52,47 @@ export default async function cat(write, args, env) {
     }
   }
 
-  // --- generate default file path (VFS) ---
-  const pathParts = args[0].startsWith('/')
-    ? args[0].split('/')
-    : (env.path + '/' + args[0]).split('/');
+  //generate default file path (vfs)
+  const pathParts = args[0].startsWith("/")
+    ? args[0].split("/")
+    : (env.path + "/" + args[0]).split("/");
 
   const cleanParts = pathParts.filter(Boolean);
-  let node = env.fs['/'];
+  let node = env.fs["/"];
 
   for (let part of cleanParts) {
     if (node.children && node.children[part]) {
       node = node.children[part];
-    } else if (args[0] !== '*') {
+    } else if (args[0] !== "*") {
       write(`cat: ${args[0]}: No such file or directory`);
       return;
     }
   }
 
-  if (args[0].includes('*')) {
+  if (args[0].includes("*")) {
     const files = getFilesFromDirectory(node);
-    const pattern = new RegExp(args[0].replace(/\*/g, '.*'));
+    const pattern = new RegExp(args[0].replace(/\*/g, ".*"));
     const matchingFiles = files.filter(file => pattern.test(file));
 
     if (matchingFiles.length > 0) {
       for (let file of matchingFiles) {
         const fileNode = node.children[file];
 
-        if (fileNode.type === 'file') {
-          write(fileNode.content || '');
-        } else if (fileNode.type === 'repo') {
-          const repoName = file.replace(/\.[^.]+$/, '');
+        if (fileNode.type === "file") {
+          write(fileNode.content || "");
+        } else if (fileNode.type === "repo") {
+          const repoName = file.replace(/\.[^.]+$/, "");
           await fetchRepoContent(repoName, write);
-          write('<hr>');
-        } else if (fileNode.type === 'cv') {
-          const mdFileName = file.replace('.txt', '.md');
+          write("<hr>");
+        } else if (fileNode.type === "cv") {
+          const mdFileName = file.replace(".txt", ".md");
           const mdPath = `../resume/${mdFileName}`;
           try {
             const response = await fetch(mdPath);
             if (response.ok) {
               const content = await response.text();
               write(marked.parse(content));
-              write('<hr>');
+              write("<hr>");
             } else {
               write(`cat: Could not load ${mdFileName}`);
             }
@@ -103,34 +104,32 @@ export default async function cat(write, args, env) {
     } else {
       write(`cat: No files matching ${args[0]}`);
     }
-  }
-  else if (node.type === 'repo') {
-    const repoName = cleanParts.at(-1).replace(/\.[^.]+$/, '');
+  } else if (node.type === "repo") {
+    const repoName = cleanParts.at(-1).replace(/\.[^.]+$/, "");
     await fetchRepoContent(repoName, write);
-    write('<hr>');
-  }
-  else if (node.type === 'cv') {
+    write("<hr>");
+  } else if (node.type === "cv") {
     const cvFile = cleanParts.at(-1);
-    const mdFileName = cvFile.replace('.txt', '.md');
-    const isContact = cvFile === 'contact.txt';
-    const mdPath = isContact ? `../quicklinks/${mdFileName}` : `../resume/${mdFileName}`;
+    const mdFileName = cvFile.replace(".txt", ".md");
+    const isContact = cvFile === "contact.txt";
+    const mdPath = isContact
+      ? `../quicklinks/${mdFileName}`
+      : `../resume/${mdFileName}`;
     try {
       const response = await fetch(mdPath);
       if (response.ok) {
         const content = await response.text();
         write(marked.parse(content));
-        write('<hr>');
+        write("<hr>");
       } else {
         write(`cat: Could not load ${mdFileName}`);
       }
     } catch (err) {
       write(`cat: Error loading ${mdFileName}: ${err.message}`);
     }
-  }
-  else if (node.type === 'file') {
-    write(node.content || '');
-  }
-  else {
+  } else if (node.type === "file") {
+    write(node.content || "");
+  } else {
     write(`cat: ${args[0]}: Is a directory`);
   }
 }
@@ -138,7 +137,7 @@ export default async function cat(write, args, env) {
 function getFilesFromDirectory(directoryNode) {
   return Object.keys(directoryNode.children || {}).filter(child => {
     const type = directoryNode.children[child].type;
-    return type === 'file' || type === 'repo' || type === 'cv';
+    return type === "file" || type === "repo" || type === "cv";
   });
 }
 
@@ -152,11 +151,15 @@ async function fetchRepoContent(repoName, write) {
       const overviewContent = extractOverviewSection(readmeContent);
 
       if (overviewContent) {
-        const filteredContent = overviewContent.replace(/<img[^>]*>/gi, '');
-        write(`<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Overview of ${repoName} (Repository)</a></h3>`);
+        const filteredContent = overviewContent.replace(/<img[^>]*>/gi, "");
+        write(
+          `<h3><a href="https://github.com/actuallypav/${repoName}" target="_blank">Overview of ${repoName} (Repository)</a></h3>`
+        );
         write(marked.parse(filteredContent));
       } else {
-        write(`cat: Overview section not found in the README.md for repo ${repoName}.`);
+        write(
+          `cat: Overview section not found in the README.md for repo ${repoName}.`
+        );
       }
     } else {
       write(`cat: Unable to fetch README.md for repo ${repoName}.`);
@@ -170,4 +173,17 @@ function extractOverviewSection(content) {
   const overviewRegex = /## Overview\s*(.*?)(\n##|\n#|\n$)/s;
   const match = content.match(overviewRegex);
   return match && match[1] ? match[1].trim() : null;
+}
+
+function stripTopTitle(md) {
+  const lines = md.replace(/^\uFEFF/, "").split("\n");
+  const firstIdx = lines.findIndex(l => l.trim() !== "");
+  if (
+    firstIdx !== -1 &&
+    !/^(#{1,6}\s|<|>|-|\*|_)/.test(lines[firstIdx].trim()) &&
+    (lines[firstIdx + 1] ?? "").trim() === ""
+  ) {
+    lines.splice(firstIdx, 2);
+  }
+  return lines.join("\n");
 }
