@@ -35,32 +35,56 @@ marked.setOptions({
     smartLists: true,
     smartypants: false,
     highlight: function(code, language) {
-        return code; // hook in a highlighter if you want
+        return code;
     }
 });
 
 export default async function blog(write, args) {
-    if (args.length === 0)
-        return write('blog: missing argument. Usage: blog <DDMMYYYY|latest|list>');
+  if (args.length === 0)
+    return write('blog: missing argument. Usage: blog <DDMMYYYY|latest|list>');
 
-    const posts = await listBlog('/blog') || [];
-    if (posts.length === 0) return write('blog: no posts found');
+  const posts = await listBlog('/blog') || [];
+  if (posts.length === 0) return write('blog: no posts found');
 
-    const arg = args[0].toLowerCase();
+  const arg = String(args[0]).toLowerCase();
 
-    if (arg === 'latest') {
-        const p = posts[0];
-        const md = await fetchPost(p.path);
-        return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
-    }
+  // --- list / --list ---
+  if (arg === 'list' || arg === '--list') {
+    const rows = posts.map(p => {
+      const path = p.path || ('/' + String(p.file || '').replace(/^\/+/, ''));
+      const date = p.date;
+      const title = (p.title || '').replace(/</g,'&lt;');
+      return `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${path}">${date} — ${title}</a>`;
+    });
+    return write(rows.join('<br>'));
+  }
 
-    if (!/^\d{8}$/.test(arg))
-        return write('blog: invalid date. Use DDMMYYYY, "latest", or "list"');
+  //latest
+  if (arg === 'latest') {
+    const p = posts[0];
+    const md = await fetchPost(p.path || ('/' + p.file));
+    return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
+  }
 
-    const p = posts.find(x => x.date === args);
-    if (!p)
-        return write(`blog: no post for ${arg}. Try "blog list".`)
+  //DDMMYYYY
+  if (!/^\d{8}$/.test(arg))
+    return write('blog: invalid date. Use DDMMYYYY, "latest", or "list"');
 
-    const md = await fetchPost(p.path);
-    write(`<h2>${p.title}</h2>\n${md}`);
+  //convert DDMMYYYY -> YYYY-MM-DD
+  const dd = arg.slice(0,2), mm = arg.slice(2,4), yyyy = arg.slice(4);
+  const iso = `${yyyy}-${mm}-${dd}`;
+
+  // try exact date match first, then fallback to filename prefix (e.g. 01092025-*)
+  const p =
+    posts.find(x => x.date === iso) ||
+    posts.find(x => {
+      const fname = (x.file || x.path || '').split('/').pop() || '';
+      return fname.toLowerCase().startsWith(`${arg}-`);
+    });
+
+  if (!p)
+    return write(`blog: no post for ${arg}. Try "blog list".`);
+
+  const md = await fetchPost(p.path || ('/' + p.file));
+  return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
 }
