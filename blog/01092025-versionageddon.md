@@ -1,7 +1,5 @@
 # Versionageddon
 
-## Versionageddon
-
 Versioning is a deeply confusing topic. Generally, users believe that [Semantic Versioning](https://semver.org/) is the appropriate way to manage software. So, for example:
 
 1. MAJOR version when you make incompatible API changes
