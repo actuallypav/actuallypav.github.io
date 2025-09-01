@@ -50,9 +50,17 @@ export default async function ls(write, args, { path }) {
 
             // Posts (blog or year/month in old_posts)
             if (dynamicPath === '/blog' || /^\/old_posts\/\d{4}\/\d{2}$/.test(dynamicPath)) {
-                const posts = (items || []).map(p =>
-                    `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${p.path}">${p.date}-${p.title.replace(/</g,'&lt;')}</a>`
-                );
+                const posts = (items || []).map(p => {
+                  // ensure we have a real path for the link
+                  const path = p.path || ('/' + String(p.file || '').replace(/^\/+/, ''));
+                
+                  // label = filename without "blog/" and ".md"
+                  const name = (p.file ? p.file : path)
+                    .replace(/^\/?blog\//, '')
+                    .replace(/\.md$/i, '');
+                
+                  return `<a href="#" class="fs-link" data-fs-type="file" data-fs-path="${path}">${name.replace(/</g,'&lt;')}</a>`;
+                });
                 if (isHomeBlog) {
                     const oldPath = pathToCheck.replace(/\/$/, '') + '/old_posts';
                     posts.unshift(`<a href="#" class="fs-link" data-fs-type="dir" data-fs-path="${oldPath}">old_posts/</a>`);
