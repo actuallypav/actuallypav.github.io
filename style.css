@@ -185,13 +185,13 @@ th {
 p {
   margin-top: 0;
   margin-bottom: 0;
-  line-height: 0.5; 
+  line-height: 1.1;
 }
 
 /* tighten list spacing */
 ul li, ol li {
   margin: 0;
-  line-height: 0.5;
+  line-height: 1.1;
 }
 
 ul, ol {
