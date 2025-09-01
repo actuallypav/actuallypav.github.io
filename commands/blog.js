@@ -1,5 +1,5 @@
 import { list as listBlog, fetchPost } from '../content/blogLoader.js';
-import MarkdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js";
+import MarkdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/+esm";
 
 export const description = `blog: blog [latest|DDMMYYYY|--list]
     Manage and view blog posts from the terminal.
