@@ -162,3 +162,69 @@ body {
   word-wrap: break-word;
   overflow-x: hidden;
 }
+
+/* Markdown-It tables */
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #666;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+th {
+  background: #222;
+  font-weight: bold;
+}
+
+/* tighten paragraph spacing */
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.1;
+}
+
+/* tighten list spacing */
+ul li, ol li {
+  margin: 0;
+  line-height: 1.1;
+}
+
+ul, ol {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+/* tighten heading spacing */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0.2em;
+  margin-bottom: 0.1em;
+}
+
+br {
+  line-height: 0.4em; 
+  content: "";          
+  display: block;       
+}
+
+/* Inline code */
+code {
+  background-color: rgba(0, 0, 0, 0.7);                       
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* Code blocks */
+pre code {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: monospace;
+}
