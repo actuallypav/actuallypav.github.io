@@ -1,7 +1,17 @@
 [
   {
-    "path": "/blog/31082025-welcome.md",
-    "date": "31082025",
-    "title": "Welcome"
+    "date": "2025-09-01",
+    "file": "blog/01092025-versionageddon.md",
+    "title": "Versionageddon"
+  },
+  {
+    "date": "2025-08-31",
+    "file": "blog/31082025-welcome.md",
+    "title": "welcome"
+  },
+  {
+    "date": "2025-08-29",
+    "file": "blog/29082025-test.md",
+    "title": "test"
   }
 ]
