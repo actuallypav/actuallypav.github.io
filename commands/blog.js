@@ -1,5 +1,5 @@
 import { list as listBlog, fetchPost } from '../content/blogLoader.js';
-import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js";
+import MarkdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.esm.js";
 
 export const description = `blog: blog [latest|DDMMYYYY|--list]
     Manage and view blog posts from the terminal.
@@ -25,18 +25,11 @@ export const description = `blog: blog [latest|DDMMYYYY|--list]
         >0 if no posts exist, the argument is invalid, or no post matches the date.`;
 
 
-marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
-    highlight: function(code, language) {
-        return code;
-    }
+const mdParser = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
+  breaks: true,
 });
 
 export default async function blog(write, args) {
@@ -63,7 +56,7 @@ export default async function blog(write, args) {
   if (arg === 'latest') {
     const p = posts[0];
     const md = await fetchPost(p.path || ('/' + p.file));
-    return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
+    return write(`<h2>${p.title}</h2>\n${mdParser.render(md)}`);
   }
 
   //DDMMYYYY
@@ -86,5 +79,5 @@ export default async function blog(write, args) {
     return write(`blog: no post for ${arg}. Try "blog list".`);
 
   const md = await fetchPost(p.path || ('/' + p.file));
-  return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
+  return write(`<h2>${p.title}</h2>\n${mdParser.render(md)}`);
 }
