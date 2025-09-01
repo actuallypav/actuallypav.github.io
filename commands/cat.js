@@ -3,7 +3,7 @@ import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.es
 
 marked.use({
   gfm: true,
-  breaks: true,
+  breaks: false,
 });
 
 export const description = `cat: cat [file|pattern]
