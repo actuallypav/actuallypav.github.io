@@ -57,7 +57,7 @@ export default async function blog(write, args) {
   if (arg === 'latest') {
     const p = posts[0];
     const md = await fetchPost(p.path || ('/' + p.file));
-    return write(`<h2>${p.title}</h2>\n${mdParser.render(md)}`);
+    return write(`${mdParser.render(md)}`);
   }
 
   //DDMMYYYY
@@ -80,5 +80,5 @@ export default async function blog(write, args) {
     return write(`blog: no post for ${arg}. Try "blog list".`);
 
   const md = await fetchPost(p.path || ('/' + p.file));
-  return write(`<h2>${p.title}</h2>\n${mdParser.render(md)}`);
+  return write(`${mdParser.render(md)}`);
 }
