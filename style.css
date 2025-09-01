@@ -188,9 +188,9 @@ p {
 }
 
 /* tighten list spacing */
-ul, ol {
-  margin-top: 0;
-  margin-bottom: 0;
+ul li, ol li {
+  margin: 0;
+  line-height: 1.1;
 }
 
 /* tighten heading spacing */
