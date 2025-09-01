@@ -1,4 +1,5 @@
 import { list as listBlog, fetchPost } from '../content/blogLoader.js';
+import { marked } from "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js";
 
 export const description = `blog: blog [latest|DDMMYYYY|--list]
     Manage and view blog posts from the terminal.
@@ -24,6 +25,20 @@ export const description = `blog: blog [latest|DDMMYYYY|--list]
         >0 if no posts exist, the argument is invalid, or no post matches the date.`;
 
 
+marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function(code, language) {
+        return code; // hook in a highlighter if you want
+    }
+});
+
 export default async function blog(write, args) {
     if (args.length === 0)
         return write('blog: missing argument. Usage: blog <DDMMYYYY|latest|list>');
@@ -36,7 +51,7 @@ export default async function blog(write, args) {
     if (arg === 'latest') {
         const p = posts[0];
         const md = await fetchPost(p.path);
-        return write(`<h2>${p.title}</h2>\n${md}`);
+        return write(`<h2>${p.title}</h2>\n${marked.parse(md)}`);
     }
 
     if (!/^\d{8}$/.test(arg))
