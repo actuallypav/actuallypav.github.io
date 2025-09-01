@@ -26,7 +26,7 @@ export const description = `blog: blog [latest|DDMMYYYY|--list]
 
 
 const mdParser = new MarkdownIt({
-  html: false,
+  html: true,
   linkify: true,
   typographer: true,
   highlight:true,
