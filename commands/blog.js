@@ -26,10 +26,11 @@ export const description = `blog: blog [latest|DDMMYYYY|--list]
 
 
 const mdParser = new MarkdownIt({
-  html: true,
+  html: false,
   linkify: true,
   typographer: true,
-  breaks: true,
+  highlight:true,
+  breaks: true
 });
 
 export default async function blog(write, args) {
