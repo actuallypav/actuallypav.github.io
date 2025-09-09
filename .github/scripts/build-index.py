@@ -84,7 +84,7 @@ def build_archive_indexes(full: bool = False):
 if __name__ == "__main__":
     try:
         import subprocess, sys
-        subprocess.run([sys.executable, str(ROOT / ".github" / "scripts_py" / "archive_posts.py")], check=False)
+        subprocess.run([sys.executable, str(ROOT / ".github" / "scripts_py" / "archive-posts.py")], check=False)
     except Exception:
         pass
 
