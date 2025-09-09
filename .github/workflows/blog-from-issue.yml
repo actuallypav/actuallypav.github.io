@@ -26,8 +26,8 @@ jobs:
         id: create_post
         run: python .github/scripts/make-post.py
 
-      - name: Archive old posts (keep 10 newest)
-        run: python .github/scripts/archive-posts.py
+      #- name: Archive old posts (keep 10 newest)
+      #  run: python .github/scripts/archive-posts.py
 
       - name: Rebuild indexes
         run: python .github/scripts/build-index.py
