@@ -9,4 +9,4 @@ There may be an argument that humans don't collect consciously. There are people
 All of this is food for thought, and more so, adding one and one together, to make an assumption. Not all of it is true, but it really makes your head hurt when you start comparing everyday things to collecting. Life is just one big <u>***collection***</u>.
 
  _<p align="right"> --- A collection can offer life-support over time, a means of trading, a basis for community and communication, a stockpile of wealth, and a mechanism of self-identity.</p>_ 
-<p align="right"> <a href="https://www.artbasel.com/stories/survey-global-collectors-art-basel-professor-andrew-dillon-university-of-texas?lang=en"> Prof. Andrew Dillon </a></p>
+<p align="right"> <a href="https://www.artbasel.com/stories/survey-global-collectors-art-basel-professor-andrew-dillon-university-of-texas?lang=en">Prof. Andrew Dillon</a></p>
