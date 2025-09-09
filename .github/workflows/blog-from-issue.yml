@@ -9,7 +9,7 @@ permissions:
   issues: write
 
 jobs:
-  make-post:
+  publish-blog-post:
     if: contains(github.event.issue.labels.*.name, 'blog-post')
     runs-on: ubuntu-latest
     env:
