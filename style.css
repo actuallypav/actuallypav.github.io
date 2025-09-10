@@ -199,6 +199,13 @@ ul, ol {
   margin-bottom: 0.1em;
 }
 
+/* remove extra indent and reset style for nested lists */
+ul ul, ul ol, ol ul, ol ol {
+  margin: 0;
+  padding-left: 0; 
+  list-style-type: inherit;
+}
+
 /* tighten heading spacing */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0.2em;
