@@ -5,12 +5,19 @@ Difficulty is challenging to quantify, as different people approach it different
 Focusing on User Experience metrics for difficulty. There isn't a clear metric that outlines how much time a user spends interacting with products. [There are](https://www.bentley.edu/centers/user-experience-center/measuring-difficulty-doesnt-need-be-difficult):
 
 <u>Subject Mental Effort Questionnaire</u>
+
     - Measures how difficult users find a task to be.
+    
 <u>Subjective Mental Effort Questionnaire</u>
+
     - A questionnaire that measures the mental effort people feel is involved in a task.
+    
 <u>After-Scenario Questionnaire</u>
+
     - Includes three questions that assess the perceived level of difficulty of a task (the ease, time taken to complete, and the support required to complete the task)
+    
 <u>NASA Task Load Index</u>
+
     - Involves six questions on an unlabeled 21-point scale. Each question addresses one type of challenge:
     - Mental Demand
         - Physical Demand
@@ -18,7 +25,9 @@ Focusing on User Experience metrics for difficulty. There isn't a clear metric t
         - Perceived Success
         - Overall Effort
         - Frustration
+        
 <u>Expectation Measure</u>
+
     - Revolves around the idea that an expectation is the anticipation of a future experience based on prior knowledge.
 
 By taking on all these tasks, developers can provide an improved product experience design and overall enhance the user experience.
