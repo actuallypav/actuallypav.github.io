@@ -6,29 +6,29 @@ Focusing on User Experience metrics for difficulty. There isn't a clear metric t
 
 <u>Subject Mental Effort Questionnaire</u>
 
-    - Measures how difficult users find a task to be.
+- Measures how difficult users find a task to be.
     
 <u>Subjective Mental Effort Questionnaire</u>
 
-    - A questionnaire that measures the mental effort people feel is involved in a task.
+- A questionnaire that measures the mental effort people feel is involved in a task.
     
 <u>After-Scenario Questionnaire</u>
 
-    - Includes three questions that assess the perceived level of difficulty of a task (the ease, time taken to complete, and the support required to complete the task)
+- Includes three questions that assess the perceived level of difficulty of a task (the ease, time taken to complete, and the support required to complete the task)
     
 <u>NASA Task Load Index</u>
 
-    - Involves six questions on an unlabeled 21-point scale. Each question addresses one type of challenge:
-    - Mental Demand
-        - Physical Demand
-        - Time Pressure
-        - Perceived Success
-        - Overall Effort
-        - Frustration
+- Involves six questions on an unlabeled 21-point scale. Each question addresses one type of challenge:
+- Mental Demand
+    - Physical Demand
+    - Time Pressure
+    - Perceived Success
+    - Overall Effort
+    - Frustration
         
 <u>Expectation Measure</u>
 
-    - Revolves around the idea that an expectation is the anticipation of a future experience based on prior knowledge.
+- Revolves around the idea that an expectation is the anticipation of a future experience based on prior knowledge.
 
 By taking on all these tasks, developers can provide an improved product experience design and overall enhance the user experience.
 Taking this example head-on, it can be inferred that difficulty cannot be assessed in an umbrella-like collection of experiences. Every moment has to be taken into account to provide a whole idea of the difficulty. Therefore, when exploring Silksong's difficulty (which the author has definitely not played), it has to be noted that likely due to the mental challenge of the video game's new and unknown experience, the physical demand from player's lacking skill or inexperience with the new title, time pressure of wanting to be the first to complete/keep up with other people, perceiving success as defeating specific bosses, and the frustration that continued failing provides then yes - the game must seem very difficult. Though as players build on their skills in completing these tasks, they might find that the "Overall Effort" decreases...
