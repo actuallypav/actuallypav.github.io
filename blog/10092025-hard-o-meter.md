@@ -4,21 +4,21 @@ Last night's topic was on collections and exploring why humans collect. Continui
 Difficulty is challenging to quantify, as different people approach it differently. For instance, seeking further information on how to measure difficulty reveals that there isn't a clear answer surrounding the topic. Generally, there is no one clear explanation of how we measure difficulty. Humans have to compartmentalise difficulty between different categories. Creative people will find difficulty in mundane tasks, but mundane people will struggle with creative tasks.
 Focusing on User Experience metrics for difficulty. There isn't a clear metric that outlines how much time a user spends interacting with products. [There are](https://www.bentley.edu/centers/user-experience-center/measuring-difficulty-doesnt-need-be-difficult):
 
-- Subject Mental Effort Questionnaire
+<u>Subject Mental Effort Questionnaire</u>
     - Measures how difficult users find a task to be.
-- Subjective Mental Effort Questionnaire
+<u>Subjective Mental Effort Questionnaire</u>
     - A questionnaire that measures the mental effort people feel is involved in a task.
-- After-Scenario Questionnaire
+<u>After-Scenario Questionnaire</u>
     - Includes three questions that assess the perceived level of difficulty of a task (the ease, time taken to complete, and the support required to complete the task)
-- NASA Task Load Index
+<u>NASA Task Load Index</u>
     - Involves six questions on an unlabeled 21-point scale. Each question addresses one type of challenge:
-        - Mental Demand
+    - Mental Demand
         - Physical Demand
         - Time Pressure
         - Perceived Success
         - Overall Effort
         - Frustration
-- Expectation Measure
+<u>Expectation Measure</u>
     - Revolves around the idea that an expectation is the anticipation of a future experience based on prior knowledge.
 
 By taking on all these tasks, developers can provide an improved product experience design and overall enhance the user experience.
